@@ -21,3 +21,13 @@ function disconnect() {
     ws.close();
     message_div.innerHTML = "Disconnected";
 }
+
+// Send a message to the server with the user's name
+function entername() {
+    var data = {
+        type: "entername",
+        name: document.getElementById("name").value
+    };
+    message_div.innerHTML = data.name;
+    ws.send(JSON.stringify(data));
+}
