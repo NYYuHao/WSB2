@@ -1,7 +1,10 @@
 const ws = new WebSocket("ws://localhost:8000");
-const message_div = document.getElementById("message-div");
 
-var player = 0;
+const message_div = document.getElementById("message-div");
+const main_canvas = document.getElementById("main-canvas");
+
+const width = main_canvas.width = window.innerWidth;
+const height = main_canvas.height = window.innerHeight;
 
 ws.onmessage = function(msg) {
     var data = JSON.parse(msg.data);
@@ -9,9 +12,7 @@ ws.onmessage = function(msg) {
     
     switch(data.type) {
         case 'connection':
-            if (player == 0)
-                player = data.player;
-            message_div.innerHTML = `Player ${player}`;
+            message_div.innerHTML = `Players: ${data.players}`;
             break;
     }
 }

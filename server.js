@@ -7,7 +7,7 @@ wss.on('connection', (ws, req) => {
     console.log(`Connection created: ${req.connection.remoteAddress}`);
 
     // Send a message on initial connection
-    var initial = { type: 'connection', player: wss.clients.size };
+    var initial = { type: 'connection', players: wss.clients.size };
     ws.send(JSON.stringify(initial));
 
     // Handle messages from client
