@@ -3,8 +3,12 @@ const ws = new WebSocket("ws://localhost:8000");
 const message_div = document.getElementById("message-div");
 const main_canvas = document.getElementById("main-canvas");
 
-const width = main_canvas.width = window.innerWidth;
-const height = main_canvas.height = window.innerHeight;
+const width = main_canvas.width = window.innerWidth * .9;
+const height = main_canvas.height = window.innerHeight * .9;
+const ctx = main_canvas.getContext('2d');
+
+ctx.fillStyle = 'rgb(0, 0, 0)';
+ctx.fillRect(0, 0, width, height);
 
 ws.onmessage = function(msg) {
     var data = JSON.parse(msg.data);
