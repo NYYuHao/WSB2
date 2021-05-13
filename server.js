@@ -1,5 +1,6 @@
 const {Server} = require('ws');
 const wss = new Server({port: 8000});
+const Game = require('./game.js');
 
 console.log("Listening on port 8000...");
 
