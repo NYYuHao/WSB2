@@ -26,6 +26,23 @@ class Game {
         console.log(this.playerHands);
     }
 
+
+    // TODO: Maybe instead have functions for isPair or isStraight, etc.
+
+    // Returns true if hand is valid
+    // hand is an array of cards
+    static validHand(hand) {
+        if (hand.length == 1) return true;
+        if (hand.length == 2) return (hand[0] / 4 == hand[1] / 4);
+        if (hand.length == 5) {
+            // Check Straight
+            // Check Flush
+            // Check Full House
+            // Check Four of a Kind
+        }
+        return false;
+    }
+
     // Compare two hands
     // h1 and h2 are arrays of cards
     // Returns true if h1 has a lower value than h2
