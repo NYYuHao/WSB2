@@ -26,21 +26,29 @@ class Game {
         console.log(this.playerHands);
     }
 
+    // Return true if h is a pair
+    static isPair(h) {
+        return (h.length == 2 && Math.floor(h[0]/4) == Math.floor(h[1]/4));
+    }
 
-    // TODO: Maybe instead have functions for isPair or isStraight, etc.
+    // Return true if h is a three of a kind
+    static isThreeOfKind(h) {
+        return (h.length == 3 && Math.floor(h[0]/4) == Math.floor(h[1]/4)
+            && Math.floor(h[1]/4) == Math.floor(h[2]/4));
+    }
 
-    // Returns true if hand is valid
-    // hand is an array of cards
-    static validHand(hand) {
-        if (hand.length == 1) return true;
-        if (hand.length == 2) return (hand[0] / 4 == hand[1] / 4);
-        if (hand.length == 5) {
-            // Check Straight
-            // Check Flush
-            // Check Full House
-            // Check Four of a Kind
-        }
-        return false;
+    // Return true if h is a straight
+    // h must be sorted and "fixed" as defined in compareHands()
+    static isStraight(h) {
+        if (h.length != 5) return false;
+        // TODO: Figure out a good way to do this
+    }
+
+    // Return true if h is a flush
+    static isFlush(h) {
+        if (h.length != 5) return false;
+        let suit = h[0]%4;
+        return h.every((card) => card%4 == suit);
     }
 
     // Compare two hands
@@ -51,13 +59,20 @@ class Game {
             return false;
         }
 
+        // "Fix" the cards so that As and 2s are highest value
+        let fh1 = h1.map((card) => { (card < 8) ? card + 52 : card; });
+        let fh2 = h2.map((card) => { (card < 8) ? card + 52 : card; });
+        // Sort for convenience
+        fh1.sort();
+        fh2.sort();
+
         // Comparing singles, 2s > As > Ks > Qs ...
-        if (h1.length == 1) {
-            let c1 = h1[0];
-            let c2 = h2[0];
-            if (c1 < 8) c1 += 52;
-            if (c2 < 8) c2 += 52;
-            return c1 < c2;
+        if (fh1.length == 1) {
+            return fh1[0] < fh2[0];
+        }
+        // Comparing pairs
+        if (isPair(fh1) && isPair(fh2)) {
+            return Math.max(...fh1) < Math.max(...fh2);
         }
     }
 }
