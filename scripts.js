@@ -18,6 +18,9 @@ ws.onmessage = function(msg) {
         case 'connection':
             message_div.innerHTML = `Players: ${data.players}`;
             break;
+        case 'creategame':
+            message_div.innerHTML = `Game code: ${data.id}`;
+            break;
     }
 }
 
@@ -28,11 +31,9 @@ function disconnect() {
 }
 
 // Send a message to the server with the user's name
-function entername() {
+function creategame() {
     var data = {
-        type: "entername",
-        name: document.getElementById("name").value
+        type: "creategame"
     };
-    message_div.innerHTML = data.name;
     ws.send(JSON.stringify(data));
 }
