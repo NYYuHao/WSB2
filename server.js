@@ -23,7 +23,7 @@ wss.on('connection', (ws, req) => {
                 ws.send(JSON.stringify(createGame(ws)));
                 break;
             default:
-                console.log("Unrecognized message type");
+                console.error("ERROR: Unrecognized message type");
                 break;
         }
     });

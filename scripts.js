@@ -12,7 +12,6 @@ ctx.fillRect(0, 0, width, height);
 
 ws.onmessage = function(msg) {
     var data = JSON.parse(msg.data);
-    console.log(data);
     
     switch(data.type) {
         case 'connection':
@@ -22,7 +21,7 @@ ws.onmessage = function(msg) {
             if (data.success)
                 message_div.innerHTML = `Game code: ${data.id}`;
             else
-                console.log('Already in game');
+                console.error('ERROR: Already in game');
             break;
     }
 }
