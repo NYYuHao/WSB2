@@ -3,15 +3,15 @@ const crypto = require('crypto');
 const wss = new Server({port: 8000});
 const Game = require('./game.js');
 
-// gamesTable holds the ongoing games in [id: {game, players}] pairs
-var gamesTable = {};
+var gamesTable = {};        // Holds the ongoing games in [id: {game, players}] pairs
+var playersSet = new Set(); // Set of WebSockets already in a game
 
 console.log("Listening on port 8000...");
 wss.on('connection', (ws, req) => {
     console.log(`Connection created: ${req.connection.remoteAddress}`);
 
     // Send a message on initial connection
-    let initial = { type: 'connection', players: wss.clients.size };
+    let initial = {type: 'connection', players: wss.clients.size};
     ws.send(JSON.stringify(initial));
 
     // Handle messages from client
@@ -20,9 +20,7 @@ wss.on('connection', (ws, req) => {
         
         switch(msg.type) {
             case "creategame":
-                console.log("Creating game");
-                let gameid = createGame();
-                ws.send(JSON.stringify({ type: 'creategame', id: gameid}));
+                ws.send(JSON.stringify(createGame(ws)));
                 break;
             default:
                 console.log("Unrecognized message type");
@@ -37,13 +35,20 @@ wss.on('connection', (ws, req) => {
 });
 
 
-// Create a game and add it to the gamesTable
-// Returns the resulting randomly generated id
-function createGame() {
-    let id = crypto.randomBytes(3).toString('hex');
-    gamesTable[id] = {
+// Create a game for player ws and add it to the gamesTable
+// Returns the resulting randomly generated id and whether the game was created
+function createGame(ws) {
+    // Don't create a game if the player is already in one
+    if (playersSet.has(ws)) {
+        return {type: 'creategame', id: null, success: false};
+    }
+
+    console.log("Creating game");
+    let gameid = crypto.randomBytes(3).toString('hex');
+    gamesTable[gameid] = {
         game: new Game(),
-        players: []
+        players: [ws]
     };
-    return id;
+    playersSet.add(ws);
+    return {type: 'creategame', id: gameid, success: true};
 };

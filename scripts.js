@@ -19,7 +19,10 @@ ws.onmessage = function(msg) {
             message_div.innerHTML = `Players: ${data.players}`;
             break;
         case 'creategame':
-            message_div.innerHTML = `Game code: ${data.id}`;
+            if (data.success)
+                message_div.innerHTML = `Game code: ${data.id}`;
+            else
+                console.log('Already in game');
             break;
     }
 }
