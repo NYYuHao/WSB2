@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>WSB2</title>
+    </head>
+    <body>
+        <h1>WSB2</h1>
+        <div id="message-div"></div>
+
+        <button type="button" onmouseup="creategame()">Create Game</button>
+
+        <form id="join-form">
+            <label for="code">Code:</label><br>
+            <input type="text" id="code"></input>
+            <input type="button" onmouseup="joingame()" value="Join Game"></input>
+        </form>
+
+        <br>
+        <button type="button" onmouseup="disconnect()">Disconnect</button>
+        <br>
+
+        <canvas id="main-canvas"></canvas>
+    </body>
+</html>
+
+<script src="./scripts.js"></script>
