@@ -22,6 +22,9 @@ wss.on('connection', (ws, req) => {
             case "creategame":
                 ws.send(JSON.stringify(createGame(ws)));
                 break;
+            case "joingame":
+                ws.send(JSON.stringify(joinGame(ws, msg.gameid)));
+                break;
             default:
                 console.error("ERROR: Unrecognized message type");
                 break;
@@ -29,8 +32,8 @@ wss.on('connection', (ws, req) => {
     });
 
     // Handle disconnect
-    ws.on('close', (code, reason) => {
-        console.log(`Connection closed: ${reason}`);
+    ws.on('close', (code) => {
+        console.log(`Connection closed: ${req.connection.remoteAddress}`);
     })
 });
 
@@ -39,9 +42,8 @@ wss.on('connection', (ws, req) => {
 // Returns the resulting randomly generated id and whether the game was created
 function createGame(ws) {
     // Don't create a game if the player is already in one
-    if (playersSet.has(ws)) {
+    if (playersSet.has(ws))
         return {type: 'creategame', id: null, success: false};
-    }
 
     console.log("Creating game");
     let gameid = crypto.randomBytes(3).toString('hex');
@@ -52,3 +54,17 @@ function createGame(ws) {
     playersSet.add(ws);
     return {type: 'creategame', id: gameid, success: true};
 };
+
+
+// Join a game for player ws using gameid, add them to gamesTable
+function joinGame(ws, gameid) {
+    // Don't join a game if the player is already in one
+    // or if the room code is invalid
+    if (playersSet.has(ws) || !gamesTable.hasOwnProperty(gameid))
+        return {type: 'joingame', id: null, success: false};
+
+    console.log("Joining game");
+    gamesTable[gameid].players.push(ws);
+    playersSet.add(ws);
+    return {type: 'joingame', id: gameid, success: true};
+}

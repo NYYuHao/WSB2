@@ -23,6 +23,11 @@ ws.onmessage = function(msg) {
             else
                 console.error('ERROR: Already in game');
             break;
+        case 'joingame':
+            if (data.success)
+                message_div.innerHTML = `Game code: ${data.id}`;
+            else
+                console.error('ERROR: Cannot join game');
     }
 }
 
@@ -32,10 +37,19 @@ function disconnect() {
     message_div.innerHTML = "Disconnected";
 }
 
-// Send a message to the server with the user's name
+// Attempt to create a game via request to the server (fails if already in one)
 function creategame() {
     var data = {
         type: "creategame"
+    };
+    ws.send(JSON.stringify(data));
+}
+
+// Attempt to join a game (fails if already in one)
+function joingame() {
+    var data = {
+        type: "joingame",
+        gameid: document.getElementById("code").value
     };
     ws.send(JSON.stringify(data));
 }
