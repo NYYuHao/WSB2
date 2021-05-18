@@ -18,16 +18,14 @@ ws.onmessage = function(msg) {
             message_div.innerHTML = `Players: ${data.players}`;
             break;
         case 'creategame':
-            if (data.success)
-                message_div.innerHTML = `Game code: ${data.id}`;
-            else
-                console.error('ERROR: Already in game');
-            break;
         case 'joingame':
-            if (data.success)
+            if (data.success) {
                 message_div.innerHTML = `Game code: ${data.id}`;
+                enterGame();
+            }
             else
-                console.error('ERROR: Cannot join game');
+                console.error('ERROR: Cannot create/join game');
+            break;
     }
 }
 
@@ -38,7 +36,7 @@ function disconnect() {
 }
 
 // Attempt to create a game via request to the server (fails if already in one)
-function creategame() {
+function createGame() {
     var data = {
         type: "creategame"
     };
@@ -46,10 +44,26 @@ function creategame() {
 }
 
 // Attempt to join a game (fails if already in one)
-function joingame() {
+function joinGame() {
     var data = {
         type: "joingame",
         gameid: document.getElementById("code").value
     };
     ws.send(JSON.stringify(data));
+}
+
+// Change the HTML when the player is part of a game
+function enterGame() {
+    var startButton = document.createElement("button");
+    startButton.id = "start-button";
+    startButton.onmouseup = startGame;
+    startButton.innerHTML = "Start Game";
+
+    var joinForm = document.getElementById("join-form");
+    joinForm.parentNode.insertBefore(startButton, joinForm);
+}
+
+// Attempt to start a game for the given room
+function startGame() {
+
 }

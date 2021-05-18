@@ -9,16 +9,16 @@
         <h1>WSB2</h1>
         <div id="message-div"></div>
 
-        <button type="button" onmouseup="creategame()">Create Game</button>
+        <button type="button" id="create-button" onmouseup="createGame()">Create Game</button>
 
         <form id="join-form">
             <label for="code">Code:</label><br>
             <input type="text" id="code"></input>
-            <input type="button" onmouseup="joingame()" value="Join Game"></input>
+            <input type="button" id="join-button" onmouseup="joinGame()" value="Join Game"></input>
         </form>
 
         <br>
-        <button type="button" onmouseup="disconnect()">Disconnect</button>
+        <button type="button" id="disconnect-button" onmouseup="disconnect()">Disconnect</button>
         <br>
 
         <canvas id="main-canvas"></canvas>
