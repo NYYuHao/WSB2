@@ -22,7 +22,7 @@ ws.onmessage = function(msg) {
         case 'joingame':
             if (data.success) {
                 message_div.innerHTML = `Game code: ${data.id}`;
-                startGameHTML();
+                startGameHTML(data.numPlayers);
             }
             else
                 console.error('ERROR: Cannot create/join game');
@@ -54,13 +54,12 @@ function joinGame() {
 }
 
 // Change the HTML when the player is part of a game
-function startGameHTML() {
+function startGameHTML(numPlayers) {
     var startDiv = document.createElement("div");
 
-    // TODO: This should add the number of players in the game
     var numPlayerText = document.createElement("p");
     numPlayerText.id = "num-players";
-    numPlayerText.appendChild(document.createTextNode("Connected"));
+    numPlayerText.appendChild(document.createTextNode(`${numPlayers} player(s)`));
 
     var startButton = document.createElement("button");
     startButton.id = "start-button";

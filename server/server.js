@@ -43,7 +43,7 @@ wss.on('connection', (ws, req) => {
 function createGame(ws) {
     // Don't create a game if the player is already in one
     if (playersSet.has(ws))
-        return {type: 'creategame', id: null, success: false};
+        return {type: 'creategame', id: null, numPlayers: null, success: false};
 
     console.log("Creating game");
     let gameid = crypto.randomBytes(3).toString('hex');
@@ -52,7 +52,7 @@ function createGame(ws) {
         players: [ws]
     };
     playersSet.add(ws);
-    return {type: 'creategame', id: gameid, success: true};
+    return {type: 'creategame', id: gameid, numPlayers: 1, success: true};
 };
 
 
@@ -66,5 +66,6 @@ function joinGame(ws, gameid) {
     console.log("Joining game");
     gamesTable[gameid].players.push(ws);
     playersSet.add(ws);
-    return {type: 'joingame', id: gameid, success: true};
+    return {type: 'joingame', id: gameid, 
+        numPlayers: gamesTable[gameid].players.length, success: true};
 }
