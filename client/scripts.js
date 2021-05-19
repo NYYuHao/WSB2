@@ -3,6 +3,8 @@ const ws = new WebSocket("ws://localhost:8000");
 const message_div = document.getElementById("message-div");
 const join_form = document.getElementById("join-form");
 const main_canvas = document.getElementById("main-canvas");
+const start_div = document.getElementById("start-div");
+const num_players = document.getElementById("num-players");
 
 const width = main_canvas.width = window.innerWidth * .9;
 const height = main_canvas.height = window.innerHeight * .9;
@@ -22,11 +24,13 @@ ws.onmessage = function(msg) {
         case 'joingame':
             if (data.success) {
                 message_div.innerHTML = `Game code: ${data.id}`;
-                startGameHTML(data.numPlayers);
+                startGameHTML();
             }
             else
                 console.error('ERROR: Cannot create/join game');
             break;
+        case 'numplayers':
+            num_players.innerHTML = `${data.num} player(s)`;
     }
 }
 
@@ -53,26 +57,19 @@ function joinGame() {
     ws.send(JSON.stringify(data));
 }
 
-// Change the HTML when the player is part of a game
-function startGameHTML(numPlayers) {
-    var startDiv = document.createElement("div");
+// Attempt to start a game for the given room
+function startGame() {
 
-    var numPlayerText = document.createElement("p");
-    numPlayerText.id = "num-players";
-    numPlayerText.appendChild(document.createTextNode(`${numPlayers} player(s)`));
+}
 
+
+// HTML Updates
+
+// Update the HTML with the start game button
+function startGameHTML() {
     var startButton = document.createElement("button");
     startButton.id = "start-button";
     startButton.onmouseup = startGame;
     startButton.innerHTML = "Start Game";
-
-    startDiv.appendChild(numPlayerText);
-    startDiv.appendChild(startButton);
-
-    join_form.parentNode.insertBefore(startDiv, join_form.nextSibling);
-}
-
-// Attempt to start a game for the given room
-function startGame() {
-
+    start_div.appendChild(startButton);
 }

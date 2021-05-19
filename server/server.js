@@ -52,7 +52,10 @@ function createGame(ws) {
         players: [ws]
     };
     playersSet.add(ws);
-    return {type: 'creategame', id: gameid, numPlayers: 1, success: true};
+    
+    // Update the members of the game with the player count
+    updateNumPlayers(gameid)
+    return {type: 'creategame', id: gameid, success: true};
 };
 
 
@@ -66,6 +69,16 @@ function joinGame(ws, gameid) {
     console.log("Joining game");
     gamesTable[gameid].players.push(ws);
     playersSet.add(ws);
-    return {type: 'joingame', id: gameid, 
-        numPlayers: gamesTable[gameid].players.length, success: true};
+
+    // Update the members of the game with the player count
+    updateNumPlayers(gameid)
+    return {type: 'joingame', id: gameid, success: true};
+}
+
+// Update the number of players for every client in a game with gameid
+function updateNumPlayers(gameid) {
+    let numPlayers = gamesTable[gameid].players.length;
+    gamesTable[gameid].players.forEach((ws) => {
+        ws.send(JSON.stringify({type: 'numplayers', num: numPlayers}));
+    });
 }
