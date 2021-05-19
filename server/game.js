@@ -5,7 +5,7 @@ class Game {
         this.deck = [...Array(52).keys()]; // 0, 1, 2, 3 are Aces (D, C, H, S)
         this.currentPlayer = 0;
         this.numPlayers = 0;
-        this.playerHands = [[], [], [], []];
+        this.playerHands = [new Set(), new Set(), new Set(), new Set()];
     }
 
     // Shuffle the current deck
@@ -19,7 +19,7 @@ class Game {
 
         for (let i = 0; i < 13; i++) {
             for (let j = 0; j < 4; j++) {
-                this.playerHands[(j+cut)%4].push(this.deck[(i*4)+j]);
+                this.playerHands[(j+cut)%4].add(this.deck[(i*4)+j]);
             }
         }
 
