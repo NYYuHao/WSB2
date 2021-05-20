@@ -46,7 +46,13 @@ function createGame(ws) {
         return {type: 'creategame', id: null, numPlayers: null, success: false};
 
     console.log("Creating game");
-    let gameid = crypto.randomBytes(3).toString('hex');
+
+    // Repeatedly generate an ID until one is unique
+    let gameid;
+    do {
+        gameid = crypto.randomBytes(3).toString('hex');
+    } while (gamesTable.hasOwnProperty(gameid));
+
     gamesTable[gameid] = {
         game: new Game(),
         players: [ws]
