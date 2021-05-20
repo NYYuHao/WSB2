@@ -17,8 +17,8 @@ ws.onmessage = function(msg) {
     var data = JSON.parse(msg.data);
     
     switch(data.type) {
-        case 'connection':
-            message_div.innerHTML = `Players: ${data.players}`;
+        case 'notification':
+            message_div.innerHTML = data.text;
             break;
         case 'creategame':
         case 'joingame':
