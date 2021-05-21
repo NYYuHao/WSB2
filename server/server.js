@@ -43,7 +43,7 @@ wss.on('connection', (ws, req) => {
 function createGame(ws) {
     // Don't create a game if the player is already in one
     if (playersSet.has(ws))
-        return {type: 'creategame', id: null, numPlayers: null, success: false};
+        return {type: 'creategame', id: null, success: false};
 
     console.log("Creating game");
 
