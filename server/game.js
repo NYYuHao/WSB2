@@ -46,7 +46,7 @@ class Game {
         if (hnums[0] == 2)
             hnums = hnums.map((card) => card%13); // "unfix" cards for A-5 or 2-6
         else if (hnums[4] == 14) return false;
-        hnums.sort((a, b) => a - b)     // Sort numerically
+        hnums.sort((a, b) => a-b)     // Sort numerically
 
         // Check for values incrementing by one
         for (let i = 0; i < 4; i++) {
@@ -75,8 +75,8 @@ class Game {
         let fh1 = h1.map((card) => { (card < 8) ? card + 52 : card; });
         let fh2 = h2.map((card) => { (card < 8) ? card + 52 : card; });
         // Sort for convenience
-        fh1.sort();
-        fh2.sort();
+        fh1.sort((a, b) => a-b);
+        fh2.sort((a, b) => a-b);
 
         // Comparing singles, 2s > As > Ks > Qs ...
         if (fh1.length == 1) {
