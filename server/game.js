@@ -22,8 +22,6 @@ class Game {
                 this.playerHands[(j+cut)%4].add(this.deck[(i*4)+j]);
             }
         }
-
-        console.log(this.playerHands);
     }
 
     // Return true if h is a pair
@@ -41,7 +39,21 @@ class Game {
     // h must be sorted and "fixed" as defined in compareHands()
     static isStraight(h) {
         if (h.length != 5) return false;
-        // TODO: Figure out a good way to do this
+
+        let hnums = h.map((card) => Math.floor(card/4));
+        // If the hand has a three, then A 2 3 4 5 etc. is possible
+        // Otherwise if the hand has a two, then there's no straight (i.e. J Q K A 2)
+        if (hnums[0] == 2)
+            hnums = hnums.map((card) => card%13); // "unfix" cards for A-5 or 2-6
+        else if (hnums[4] == 14) return false;
+        hnums.sort((a, b) => a - b)     // Sort numerically
+
+        // Check for values incrementing by one
+        for (let i = 0; i < 4; i++) {
+            if (hnums[i] != hnums[i+1]-1)
+                return false;
+        }
+        return true;
     }
 
     // Return true if h is a flush
