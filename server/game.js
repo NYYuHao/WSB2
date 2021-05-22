@@ -64,15 +64,45 @@ class Game {
     }
     
     // Return true if h is a full house
-    // Maybe should just use this code within compareHands directly so comparison is easier
     static isFullHouse(h) {
-//        if (h.length != 5) return false;
-//        let cardCount = new Map();
-//        for (let i = 0; i < 5; i++) {
-//            let value = Math.floor(h[i]/4);
-//            let count = cardCount.has(value) ? cardCount.get(value) + 1 : 1;
-//            cardCount.set(value, count);
-//        }
+        if (h.length != 5) return false;
+        let cardCount = new Map();
+        for (let i = 0; i < 5; i++) {
+            let value = Math.floor(h[i]/4);
+            let count = cardCount.has(value) ? cardCount.get(value) + 1 : 1;
+            cardCount.set(value, count);
+        }
+        if (cardCount.size == 2) {
+            let countArray = cardCount.values().sort()
+            return countArray[0] == 2 && countArray[1] == 3;
+        }
+        return false;
+    }
+
+    // Return true if h is a full house
+    static isFullHouse(h) {
+        if (h.length != 5) return false;
+        let cardCount = {};
+        for (let i = 0; i < 5; i++) {
+            let value = Math.floor(h[i]/4);
+            let count = cardCount[value] ? cardCount[value] + 1 : 1;
+            cardCount[value] = count;
+        }
+        let countArray = Object.values(cardCount).sort();
+        return countArray[0] == 2 && countArray[1] == 3;
+    }
+
+    // Return true if h is a four of a kind
+    static isFourOfKind(h) {
+        if (h.length != 5) return false;
+        let cardCount = {};
+        for (let i = 0; i < 5; i++) {
+            let value = Math.floor(h[i]/4);
+            let count = cardCount[value] ? cardCount[value] + 1 : 1;
+            cardCount[value] = count;
+        }
+        let countArray = Object.values(cardCount).sort();
+        return countArray[0] == 1 && countArray[1] == 4;
     }
 
     // Compare two hands
