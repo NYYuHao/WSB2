@@ -62,6 +62,18 @@ class Game {
         let suit = h[0]%4;
         return h.every((card) => card%4 == suit);
     }
+    
+    // Return true if h is a full house
+    // Maybe should just use this code within compareHands directly so comparison is easier
+    static isFullHouse(h) {
+//        if (h.length != 5) return false;
+//        let cardCount = new Map();
+//        for (let i = 0; i < 5; i++) {
+//            let value = Math.floor(h[i]/4);
+//            let count = cardCount.has(value) ? cardCount.get(value) + 1 : 1;
+//            cardCount.set(value, count);
+//        }
+    }
 
     // Compare two hands
     // h1 and h2 are arrays of cards
@@ -85,6 +97,14 @@ class Game {
         // Comparing pairs
         if (isPair(fh1) && isPair(fh2)) {
             return Math.max(...fh1) < Math.max(...fh2);
+        }
+        // Comparing three of a kinds
+        if (isThreeOfKind(fh1) && isThreeOfKind(fh2)) {
+            return Math.max(...fh1) < Math.max(...fh2);
+        }
+        // Comparing five card hands
+        if (fh1.length == 5) {
+            
         }
     }
 }
