@@ -105,17 +105,39 @@ class Game {
         return countArray[0] == 1 && countArray[1] == 4;
     }
 
+    // Returns the most common card value in a hand
+    // If there are multiple modes, return the greatest
+    // Helpful for comparing full houses and four of a kinds
+    static handMode(h1) {
+        let cardCount = {};
+        for (let i = 0; i < 5; i++) {
+            let value = Math.floor(h[i]/4);
+            let count = cardCount[value] ? cardCount[value] + 1 : 1;
+            cardCount[value] = count;
+        }
+        let mode = null;
+        let count = 0;
+        for (value in cardCount) {
+            if (cardCount[value] > count ||
+                (cardCount[value] == count && value > mode)) {
+                mode = value;
+                count = cardCount[value];
+            }
+        }
+        return mode;
+    }
+
     // Compare two hands
     // h1 and h2 are arrays of cards
-    // Returns true if h1 has a lower value than h2
+    // Returns true if h2 is a valid, stronger hand than h1
     static compareHands(h1, h2) {
         if (h1.length != h2.length) {
             return false;
         }
 
         // "Fix" the cards so that As and 2s are highest value
-        let fh1 = h1.map((card) => { (card < 8) ? card + 52 : card; });
-        let fh2 = h2.map((card) => { (card < 8) ? card + 52 : card; });
+        let fh1 = h1.map((card) => (card < 8) ? card + 52 : card);
+        let fh2 = h2.map((card) => (card < 8) ? card + 52 : card);
         // Sort for convenience
         fh1.sort((a, b) => a-b);
         fh2.sort((a, b) => a-b);
@@ -125,17 +147,63 @@ class Game {
             return fh1[0] < fh2[0];
         }
         // Comparing pairs
-        if (isPair(fh1) && isPair(fh2)) {
+        if (Game.isPair(fh1) && Game.isPair(fh2)) {
             return Math.max(...fh1) < Math.max(...fh2);
         }
         // Comparing three of a kinds
-        if (isThreeOfKind(fh1) && isThreeOfKind(fh2)) {
+        if (Game.isThreeOfKind(fh1) && Game.isThreeOfKind(fh2)) {
             return Math.max(...fh1) < Math.max(...fh2);
         }
         // Comparing five card hands
         if (fh1.length == 5) {
-            
+            // fh2 is a straight flush
+            if (Game.isStraight(fh2) && Game.isFlush(fh2)) {
+                if (Game.isStraight(fh1) && Game.isFlush(fh1))
+                    return Math.max(...fh1) < Math.max(...fh2);
+                return true;
+            }
+            // fh2 is a four of a kind
+            if (Game.isFourOfKind(fh2)) {
+                if (Game.isStraight(fh1) && Game.isFlush(fh1))
+                    return false;
+                if (Game.isFourOfKind(fh1))
+                    return handMode(fh1) < handMode(fh2);
+                return true;
+            }
+            // fh2 is a full house
+            if (Game.isFullHouse(fh2)) {
+                if ((Game.isStraight(fh1) && Game.isFlush(fh1)) ||
+                    Game.isFourOfKind(fh1))
+                    return false;
+                if (Game.isFullHouse(fh1))
+                    return handMode(fh1) < handMode(fh2);
+                return true;
+            }
+            // fh2 is a flush
+            // TODO: This should compare the entire hand in case of equal values
+            if (Game.isFlush(fh2)) {
+                if ((Game.isStraight(fh1) && Game.isFlush(fh1)) ||
+                    Game.isFourOfKind(fh1) || Game.isFullHouse(fh1))
+                    return false;
+                if (Game.isFlush(fh1))
+                    return handMode(fh1) < handMode(fh2);
+                return true;
+            }
+            // fh2 is a straight
+            if (Game.isFlush(fh2)) {
+                if ((Game.isStraight(fh1) && Game.isFlush(fh1)) ||
+                    Game.isFourOfKind(fh1) || Game.isFullHouse(fh1) ||
+                    Game.isFlush(fh1))
+                    return false;
+                if (Game.isStraight(fh1))
+                    return Math.max(...fh1) < Math.max(...fh2);
+                return true;
+            }
+            // fh2 is an invalid 5 card
+            return false;
         }
+        // fh1 or fh2 is an invalid hand
+        return false;
     }
 }
 
