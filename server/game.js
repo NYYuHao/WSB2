@@ -190,7 +190,7 @@ class Game {
                 return true;
             }
             // fh2 is a straight
-            if (Game.isFlush(fh2)) {
+            if (Game.isStraight(fh2)) {
                 if ((Game.isStraight(fh1) && Game.isFlush(fh1)) ||
                     Game.isFourOfKind(fh1) || Game.isFullHouse(fh1) ||
                     Game.isFlush(fh1))
