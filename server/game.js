@@ -180,13 +180,19 @@ class Game {
                 return true;
             }
             // fh2 is a flush
-            // TODO: This should compare the entire hand in case of equal values
             if (Game.isFlush(fh2)) {
                 if ((Game.isStraight(fh1) && Game.isFlush(fh1)) ||
                     Game.isFourOfKind(fh1) || Game.isFullHouse(fh1))
                     return false;
-                if (Game.isFlush(fh1))
-                    return handMode(fh1) < handMode(fh2);
+                if (Game.isFlush(fh1)) {
+                    let ch1 = fh1.map((card) => card % 4);
+                    let ch2 = fh2.map((card) => card % 4);
+                    for (let i = 4; i >= 0; i++) {
+                        if (ch1[i] != ch2[i])
+                            return ch1[i] < ch2[i];
+                    }
+                    return false
+                }
                 return true;
             }
             // fh2 is a straight

@@ -82,8 +82,8 @@ console.assert(!Game.compareHands(invThreeOfKind1, threeOfKind1));
 // Straights
 let cstraight1 = [8, 12, 16, 20, 27]; // 7 Spades high
 let cstraight2 = [9, 13, 17, 21, 26]; // 7 Hearts high
-let cstraight3 = [10, 14, 18, 52, 57]; // 2 Diamonds high
-let cstraight4 = [11, 15, 19, 22, 56]; // 2 Clubs high
+let cstraight3 = [10, 14, 18, 52, 57]; // 2 Clubs high
+let cstraight4 = [11, 15, 19, 22, 56]; // 2 Diamonds high
 console.assert(!Game.compareHands(cstraight1, cstraight2));
 console.assert(Game.compareHands(cstraight2, cstraight1));
 console.assert(!Game.compareHands(cstraight3, cstraight4));
