@@ -88,3 +88,19 @@ console.assert(!Game.compareHands(cstraight1, cstraight2));
 console.assert(Game.compareHands(cstraight2, cstraight1));
 console.assert(!Game.compareHands(cstraight3, cstraight4));
 console.assert(Game.compareHands(cstraight4, cstraight3));
+// Flushes
+let cflush1 = [8, 12, 16, 20, 28]; // 8 high
+let cflush2 = [9, 13, 17, 21, 29]; // 8 high
+let cflush3 = [10, 14, 18, 26, 58]; // 2 3 4 5 7
+let cflush4 = [11, 15, 19, 31, 59]; // 2 3 4 5 8
+console.assert(!Game.compareHands(cflush1, cflush2)); // Ties should be false
+console.assert(!Game.compareHands(cflush2, cflush1));
+console.assert(Game.compareHands(cflush1, cflush3));
+console.assert(!Game.compareHands(cflush3, cflush1));
+console.assert(Game.compareHands(cflush3, cflush4));
+console.assert(!Game.compareHands(cflush4, cflush3));
+console.assert(!Game.compareHands(cflush1, cstraight1)); // Flushes should beat straight
+console.assert(Game.compareHands(cstraight1, cflush1));
+console.assert(!Game.compareHands(cflush1, cstraight2));
+console.assert(Game.compareHands(cstraight2, cflush1));
+

@@ -128,7 +128,7 @@ class Game {
     }
 
     // Compare two hands
-    // h1 and h2 are arrays of cards
+    // h1 and h2 are arrays of unique cards
     // Returns true if h2 is a valid, stronger hand than h1
     static compareHands(h1, h2) {
         if (h1.length != h2.length) {
@@ -185,9 +185,9 @@ class Game {
                     Game.isFourOfKind(fh1) || Game.isFullHouse(fh1))
                     return false;
                 if (Game.isFlush(fh1)) {
-                    let ch1 = fh1.map((card) => card % 4);
-                    let ch2 = fh2.map((card) => card % 4);
-                    for (let i = 4; i >= 0; i++) {
+                    let ch1 = fh1.map((card) => Math.floor(card/4));
+                    let ch2 = fh2.map((card) => Math.floor(card/4));
+                    for (let i = 4; i >= 0; i--) {
                         if (ch1[i] != ch2[i])
                             return ch1[i] < ch2[i];
                     }
