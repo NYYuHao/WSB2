@@ -84,10 +84,13 @@ let cstraight1 = [8, 12, 16, 20, 27]; // 7 Spades high
 let cstraight2 = [9, 13, 17, 21, 26]; // 7 Hearts high
 let cstraight3 = [10, 14, 18, 52, 57]; // 2 Clubs high
 let cstraight4 = [11, 15, 19, 22, 56]; // 2 Diamonds high
+let cinv1 = [8, 13, 18, 24, 29] // 3 4 5 7 8, no flush
 console.assert(!Game.compareHands(cstraight1, cstraight2));
 console.assert(Game.compareHands(cstraight2, cstraight1));
 console.assert(!Game.compareHands(cstraight3, cstraight4));
 console.assert(Game.compareHands(cstraight4, cstraight3));
+console.assert(Game.compareHands(cinv1, cstraight1));
+console.assert(!Game.compareHands(cstraight1, cinv1));
 // Flushes
 let cflush1 = [8, 12, 16, 20, 28]; // 8 high
 let cflush2 = [9, 13, 17, 21, 29]; // 8 high
@@ -103,4 +106,14 @@ console.assert(!Game.compareHands(cflush1, cstraight1)); // Flushes should beat 
 console.assert(Game.compareHands(cstraight1, cflush1));
 console.assert(!Game.compareHands(cflush1, cstraight2));
 console.assert(Game.compareHands(cstraight2, cflush1));
-
+console.assert(Game.compareHands(cinv1, cflush1));
+console.assert(!Game.compareHands(cflush1, cinv1));
+// Full Houses
+let cfullhouse1 = [8, 9, 10, 12, 13] // 3s
+let cfullhouse2 = [8, 9, 12, 13, 14] // 4s
+console.assert(Game.compareHands(cfullhouse1, cfullhouse2));
+console.assert(!Game.compareHands(cfullhouse2, cfullhouse1));
+console.assert(Game.compareHands(cstraight1, cfullhouse1));
+console.assert(Game.compareHands(cflush1, cfullhouse1));
+console.assert(Game.compareHands(cinv1, cfullhouse1));
+console.assert(!Game.compareHands(cfullhouse1, cinv1));
