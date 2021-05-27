@@ -108,7 +108,7 @@ class Game {
     // Returns the most common card value in a hand
     // If there are multiple modes, return the greatest
     // Helpful for comparing full houses and four of a kinds
-    static handMode(h1) {
+    static handMode(h) {
         let cardCount = {};
         for (let i = 0; i < 5; i++) {
             let value = Math.floor(h[i]/4);
@@ -117,7 +117,7 @@ class Game {
         }
         let mode = null;
         let count = 0;
-        for (value in cardCount) {
+        for (let value in cardCount) {
             if (cardCount[value] > count ||
                 (cardCount[value] == count && value > mode)) {
                 mode = value;
@@ -167,7 +167,7 @@ class Game {
                 if (Game.isStraight(fh1) && Game.isFlush(fh1))
                     return false;
                 if (Game.isFourOfKind(fh1))
-                    return handMode(fh1) < handMode(fh2);
+                    return Game.handMode(fh1) < Game.handMode(fh2);
                 return true;
             }
             // fh2 is a full house
@@ -176,7 +176,7 @@ class Game {
                     Game.isFourOfKind(fh1))
                     return false;
                 if (Game.isFullHouse(fh1))
-                    return handMode(fh1) < handMode(fh2);
+                    return Game.handMode(fh1) < Game.handMode(fh2);
                 return true;
             }
             // fh2 is a flush

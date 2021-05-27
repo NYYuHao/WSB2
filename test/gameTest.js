@@ -82,8 +82,8 @@ console.assert(!Game.compareHands(invThreeOfKind1, threeOfKind1));
 // Straights
 let cstraight1 = [8, 12, 16, 20, 27]; // 7 Spades high
 let cstraight2 = [9, 13, 17, 21, 26]; // 7 Hearts high
-let cstraight3 = [10, 14, 18, 52, 57]; // 2 Clubs high
-let cstraight4 = [11, 15, 19, 22, 56]; // 2 Diamonds high
+let cstraight3 = [0, 5, 10, 14, 18]; // 2 Clubs high
+let cstraight4 = [4, 11, 15, 19, 22]; // 2 Diamonds high
 let cinv1 = [8, 13, 18, 24, 29] // 3 4 5 7 8, no flush
 console.assert(!Game.compareHands(cstraight1, cstraight2));
 console.assert(Game.compareHands(cstraight2, cstraight1));
@@ -94,8 +94,8 @@ console.assert(!Game.compareHands(cstraight1, cinv1));
 // Flushes
 let cflush1 = [8, 12, 16, 20, 28]; // 8 high
 let cflush2 = [9, 13, 17, 21, 29]; // 8 high
-let cflush3 = [10, 14, 18, 26, 58]; // 2 3 4 5 7
-let cflush4 = [11, 15, 19, 31, 59]; // 2 3 4 5 8
+let cflush3 = [6, 10, 14, 18, 26]; // 2 3 4 5 7
+let cflush4 = [7, 11, 15, 19, 31]; // 2 3 4 5 8
 console.assert(!Game.compareHands(cflush1, cflush2)); // Ties should be false
 console.assert(!Game.compareHands(cflush2, cflush1));
 console.assert(Game.compareHands(cflush1, cflush3));
@@ -117,3 +117,13 @@ console.assert(Game.compareHands(cstraight1, cfullhouse1));
 console.assert(Game.compareHands(cflush1, cfullhouse1));
 console.assert(Game.compareHands(cinv1, cfullhouse1));
 console.assert(!Game.compareHands(cfullhouse1, cinv1));
+// Four of a kinds
+let cfourofkind1 = [8, 9, 10, 11, 12] // 3s
+let cfourofkind2 = [8, 12, 13, 14, 15] // 4s
+console.assert(Game.compareHands(cfourofkind1, cfourofkind2));
+console.assert(!Game.compareHands(cfourofkind2, cfourofkind1));
+console.assert(Game.compareHands(cstraight1, cfourofkind1));
+console.assert(Game.compareHands(cflush1, cfourofkind1));
+console.assert(Game.compareHands(cfullhouse1, cfourofkind1));
+console.assert(Game.compareHands(cinv1, cfourofkind1));
+console.assert(!Game.compareHands(cfourofkind1, cinv1));
