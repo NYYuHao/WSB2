@@ -10,7 +10,10 @@ class Game {
 
     // Shuffle the current deck
     shuffle() {
-        
+        for (let i = this.deck.length - 1; i > 0; i--) {
+            let j = Math.floor(Math.random() * (i + 1));
+            [this.deck[i], this.deck[j]] = [this.deck[j], this.deck[i]];
+        }       
     }
 
     // Distribute the deck into four hands, simulating an actual deal

@@ -1,6 +1,10 @@
 const Game = require('../server/game.js');
 
 const game = new Game();
+// Shuffle and deal
+game.shuffle();
+game.deal();
+console.log(game.playerHands);
 
 let single1 = [8];
 let single2 = [9];
