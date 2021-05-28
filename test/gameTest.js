@@ -127,3 +127,19 @@ console.assert(Game.compareHands(cflush1, cfourofkind1));
 console.assert(Game.compareHands(cfullhouse1, cfourofkind1));
 console.assert(Game.compareHands(cinv1, cfourofkind1));
 console.assert(!Game.compareHands(cfourofkind1, cinv1));
+// Straight flushes
+let csf1 = [8, 12, 16, 20, 24] // 3 4 5 6 7, Diamonds
+let csf2 = [1, 5, 9, 13, 17] // A 2 3 4 5, Clubs
+let csf3 = [2, 6, 10, 14, 18] // A 2 3 4 5, Hearts
+let csf4 = [7, 11, 15, 19, 23] // 2 3 4 5 6, Spades
+console.assert(Game.compareHands(csf1, csf2));
+console.assert(!Game.compareHands(csf2, csf1));
+console.assert(Game.compareHands(csf2, csf3));
+console.assert(!Game.compareHands(csf3, csf2));
+console.assert(!Game.compareHands(csf3, csf1));
+console.assert(Game.compareHands(csf3, csf4));
+console.assert(Game.compareHands(cfourofkind1, csf1));
+console.assert(Game.compareHands(cfullhouse1, csf1));
+console.assert(Game.compareHands(cflush1, csf1));
+console.assert(Game.compareHands(cstraight1, csf1));
+console.assert(Game.compareHands(cinv1, csf1));
