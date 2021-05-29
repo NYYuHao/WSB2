@@ -27,6 +27,12 @@ class Game {
         }
     }
 
+    // Return an array copy of the player hand at index ind
+    getHand(ind) {
+        if (ind < 0 || ind > 3) throw 'Invalid getHand attempt';
+        return Array.from(this.playerHands[ind]);
+    }
+
     // Return true if h is a pair
     static isPair(h) {
         return (h.length == 2 && Math.floor(h[0]/4) == Math.floor(h[1]/4));

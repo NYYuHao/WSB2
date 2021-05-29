@@ -4,7 +4,10 @@ const game = new Game();
 // Shuffle and deal
 game.shuffle();
 game.deal();
-console.log(game.playerHands);
+console.log(game.getHand(0));
+console.log(game.getHand(1));
+console.log(game.getHand(2));
+console.log(game.getHand(3));
 
 let single1 = [8];
 let single2 = [9];
