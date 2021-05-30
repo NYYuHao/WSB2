@@ -15,8 +15,11 @@ wss.on('connection', (ws, req) => {
     ws.send(JSON.stringify(initial));
 
     // Create a unique player id for the ws
-    // TODO: Check for duplicates
-    ws.pid = crypto.randomBytes(3).toString('hex');
+    let pid;
+    do {
+        pid = crypto.randomBytes(3).toString('hex');
+    } while (pidTable.hasOwnProperty(pid));
+    ws.pid = pid
 
     // Handle messages from client
     ws.on('message', (data) => {
@@ -76,6 +79,7 @@ function joinGame(ws, gameid) {
 
     console.log("Joining game");
 
+    // TODO: Ensure that adding a player is possible via try catch
     gamesTable[gameid].addPlayer(ws.pid);
     pidTable[ws.pid] = ws;
 
