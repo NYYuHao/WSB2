@@ -6,6 +6,7 @@ class Game {
         this.currentPlayer = 0;
         this.numPlayers = 0;
         this.playerHands = [new Set(), new Set(), new Set(), new Set()];
+        this.playerOrder = {};
     }
 
     // Shuffle the current deck
@@ -27,10 +28,20 @@ class Game {
         }
     }
 
-    // Return an array copy of the player hand at index ind
-    getHand(ind) {
-        if (ind < 0 || ind > 3) throw 'Invalid getHand attempt';
-        return Array.from(this.playerHands[ind]);
+    // Return an array copy of the player hand belonging to player id pid
+    getHand(pid) {
+        return Array.from(this.playerHands[this.playerOrder[pid]]);
+    }
+
+    // Add a player pid to the game
+    addPlayer(pid) {
+        if (this.numPlayers > 3) throw "Attempting to add player to full game";
+        this.playerOrder[pid] = this.numPlayers++;
+    }
+
+    // Return an array copy of the pids in the game
+    getPlayers() {
+        return Object.keys(this.playerOrder);
     }
 
     // Return true if h is a pair

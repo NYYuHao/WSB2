@@ -3,8 +3,8 @@ const crypto = require('crypto');
 const wss = new Server({port: 8000});
 const Game = require('./game.js');
 
-var gamesTable = {};        // Holds the ongoing games in [id: {game, players}] pairs
-var playersSet = new Set(); // Set of WebSockets already in a game
+var gamesTable = {};    // Holds the ongoing games in [id: {game, players}] pairs
+var pidTable = {}       // Holds {playerid: ws} pairs for all players in a game
 
 console.log("Listening on port 8000...");
 wss.on('connection', (ws, req) => {
@@ -13,6 +13,10 @@ wss.on('connection', (ws, req) => {
     // Send a message on initial connection
     let initial = {type: 'notification', text: `Players: ${wss.clients.size}`};
     ws.send(JSON.stringify(initial));
+
+    // Create a unique player id for the ws
+    // TODO: Check for duplicates
+    ws.pid = crypto.randomBytes(3).toString('hex');
 
     // Handle messages from client
     ws.on('message', (data) => {
@@ -42,7 +46,7 @@ wss.on('connection', (ws, req) => {
 // Returns the resulting randomly generated id and whether the game was created
 function createGame(ws) {
     // Don't create a game if the player is already in one
-    if (playersSet.has(ws))
+    if (pidTable.hasOwnProperty(ws.pid))
         return {type: 'creategame', id: null, success: false};
 
     console.log("Creating game");
@@ -53,11 +57,9 @@ function createGame(ws) {
         gameid = crypto.randomBytes(3).toString('hex');
     } while (gamesTable.hasOwnProperty(gameid));
 
-    gamesTable[gameid] = {
-        game: new Game(),
-        players: [ws]
-    };
-    playersSet.add(ws);
+    gamesTable[gameid] = new Game();
+    gamesTable[gameid].addPlayer(ws.pid);
+    pidTable[ws.pid] = ws;
     
     // Update the members of the game with the player count
     updateNumPlayers(gameid)
@@ -69,12 +71,13 @@ function createGame(ws) {
 function joinGame(ws, gameid) {
     // Don't join a game if the player is already in one
     // or if the room code is invalid
-    if (playersSet.has(ws) || !gamesTable.hasOwnProperty(gameid))
+    if (pidTable.hasOwnProperty(ws.pid) || !gamesTable.hasOwnProperty(gameid))
         return {type: 'joingame', id: null, success: false};
 
     console.log("Joining game");
-    gamesTable[gameid].players.push(ws);
-    playersSet.add(ws);
+
+    gamesTable[gameid].addPlayer(ws.pid);
+    pidTable[ws.pid] = ws;
 
     // Update the members of the game with the player count
     updateNumPlayers(gameid)
@@ -83,8 +86,8 @@ function joinGame(ws, gameid) {
 
 // Update the number of players for every client in a game with gameid
 function updateNumPlayers(gameid) {
-    let numPlayers = gamesTable[gameid].players.length;
-    gamesTable[gameid].players.forEach((ws) => {
-        ws.send(JSON.stringify({type: 'numplayers', num: numPlayers}));
+    let players = gamesTable[gameid].getPlayers();
+    players.forEach((pid) => {
+        pidTable[pid].send(JSON.stringify({type: 'numplayers', num: players.length}));
     });
 }
