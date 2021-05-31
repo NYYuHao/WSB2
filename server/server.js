@@ -5,6 +5,7 @@ const Game = require('./game.js');
 
 var gamesTable = {};    // Holds the ongoing games in [id: {game, players}] pairs
 var pidTable = {}       // Holds {playerid: ws} pairs for all players in a game
+var connectionsSet = new Set(); // Set of connected pids (not just those in a game)
 
 console.log("Listening on port 8000...");
 wss.on('connection', (ws, req) => {
@@ -18,7 +19,8 @@ wss.on('connection', (ws, req) => {
     let pid;
     do {
         pid = crypto.randomBytes(3).toString('hex');
-    } while (pidTable.hasOwnProperty(pid));
+    } while (connectionsSet.has(pid));
+    connectionsSet.add(pid);
     ws.pid = pid
 
     // Handle messages from client
