@@ -3,7 +3,7 @@ const crypto = require('crypto');
 const wss = new Server({port: 8000});
 const Game = require('./game.js');
 
-var gamesTable = {};    // Holds the ongoing games in [id: {game, players}] pairs
+var gamesTable = {};    // Holds the ongoing games in [id: game] pairs
 var pidTable = {}       // Holds {playerid: ws} pairs for all players in a game
 var connectionsSet = new Set(); // Set of connected pids (not just those in a game)
 
@@ -33,6 +33,9 @@ wss.on('connection', (ws, req) => {
                 break;
             case "joingame":
                 ws.send(JSON.stringify(joinGame(ws, msg.gameid)));
+                break;
+            case "startgame":
+                ws.send(JSON.stringify(startGame(ws, msg.gameid)));
                 break;
             default:
                 console.error("ERROR: Unrecognized message type");
@@ -96,4 +99,25 @@ function updateNumPlayers(gameid) {
     players.forEach((pid) => {
         pidTable[pid].send(JSON.stringify({type: 'numplayers', num: players.length}));
     });
+}
+
+// Start the game for all players in a lobby
+function startGame(ws, gameid) {
+    let game = gamesTable[gameid];
+    let players = gamesTable[gameid].getPlayers();
+
+    // Verify that ws is actually a part of game gameid
+    if (!players.includes(ws.pid)) throw "Invalid attempt to start game";
+
+    game.shuffle();
+    game.deal();
+    for (let i = 0; i < players.length; i++) {
+        pidTable[players[i]].send(JSON.stringify(
+            {
+                type: 'gethand', hand: game.getHand(players[i])
+            }
+        ));
+    }
+
+    // TODO: Rest of game start logic, return success
 }

@@ -35,7 +35,7 @@ class Game {
 
     // Add a player pid to the game
     addPlayer(pid) {
-        if (this.numPlayers > 3) throw "Attempting to add player to full game";
+        if (this.numPlayers > 3) throw "Invalid attempt to add player";
         this.playerOrder[pid] = this.numPlayers++;
     }
 

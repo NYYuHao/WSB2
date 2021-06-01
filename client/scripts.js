@@ -5,10 +5,13 @@ const join_form = document.getElementById("join-form");
 const main_canvas = document.getElementById("main-canvas");
 const start_div = document.getElementById("start-div");
 const num_players = document.getElementById("num-players");
+const hand_div = document.getElementById("hand");
+var gameid = null;
 
 const width = main_canvas.width = window.innerWidth * .9;
 const height = main_canvas.height = window.innerHeight * .9;
 const ctx = main_canvas.getContext('2d');
+
 
 ctx.fillStyle = 'rgb(0, 0, 0)';
 ctx.fillRect(0, 0, width, height);
@@ -24,6 +27,7 @@ ws.onmessage = function(msg) {
         case 'joingame':
             if (data.success) {
                 message_div.innerHTML = `Game code: ${data.id}`;
+                gameid = data.id;
                 startGameHTML();
             }
             else
@@ -31,6 +35,10 @@ ws.onmessage = function(msg) {
             break;
         case 'numplayers':
             num_players.innerHTML = `${data.num} player(s)`;
+            break;
+        case 'gethand':
+            renderHand(data.hand);
+            break;
     }
 }
 
@@ -59,7 +67,11 @@ function joinGame() {
 
 // Attempt to start a game for the given room
 function startGame() {
-
+    var data = {
+        type: "startgame",
+        gameid: gameid
+    }
+    ws.send(JSON.stringify(data));
 }
 
 
@@ -72,4 +84,13 @@ function startGameHTML() {
     startButton.onmouseup = startGame;
     startButton.innerHTML = "Start Game";
     start_div.appendChild(startButton);
+}
+
+// Render the hand returned by the server
+function renderHand(hand) {
+    // TODO: Make this fancy
+    hand.sort((a, b) => a-b);
+    for (let i = 0; i < hand.length; i++) {
+        hand_div.innerHTML += hand[i] + " ";
+    }
 }
