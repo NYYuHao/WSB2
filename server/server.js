@@ -45,7 +45,7 @@ wss.on('connection', (ws, req) => {
 
     // Handle disconnect
     ws.on('close', (code) => {
-        console.log(`Connection closed;\tPID: ${ws.pid}`);
+        console.log(`Connection closed\tPID: ${ws.pid}`);
     })
 });
 
