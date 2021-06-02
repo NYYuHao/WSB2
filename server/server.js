@@ -27,7 +27,7 @@ wss.on('connection', (ws, req) => {
     ws.on('message', (data) => {
         let msg = JSON.parse(data);
         
-        switch(msg.type) {
+        switch (msg.type) {
             case "creategame":
                 ws.send(JSON.stringify(createGame(ws)));
                 break;

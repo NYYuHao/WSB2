@@ -8,18 +8,10 @@ const num_players = document.getElementById("num-players");
 const hand_div = document.getElementById("hand");
 var gameid = null;
 
-const width = main_canvas.width = window.innerWidth * .9;
-const height = main_canvas.height = window.innerHeight * .9;
-const ctx = main_canvas.getContext('2d');
-
-
-ctx.fillStyle = 'rgb(0, 0, 0)';
-ctx.fillRect(0, 0, width, height);
-
 ws.onmessage = function(msg) {
     var data = JSON.parse(msg.data);
     
-    switch(data.type) {
+    switch (data.type) {
         case 'notification':
             message_div.innerHTML = data.text;
             break;
@@ -87,10 +79,53 @@ function startGameHTML() {
 }
 
 // Render the hand returned by the server
+// Use when game first starts
 function renderHand(hand) {
-    // TODO: Make this fancy
     hand.sort((a, b) => a-b);
     for (let i = 0; i < hand.length; i++) {
-        hand_div.innerHTML += hand[i] + " ";
+        let card = document.createElement("div");
+        card.className = 'card';
+        
+        // Card value
+        let value = Math.floor((hand[i]+4)/4).toString();
+        switch (value) {
+            case '1': 
+                value = 'A';
+                break;
+            case '11':
+                value = 'J';
+                break;
+            case '12':
+                value = 'Q';
+                break;
+            case '13':
+                value = 'K';
+                break;
+        }
+
+        // Card suit
+        let suit = hand[i]%4;
+        switch (suit) {
+            case 0:
+                suit = '&diams;';
+                card.style.color = 'red';
+                break;
+            case 1:
+                suit = '&clubs;';
+                card.style.color = 'black';
+                break;
+            case 2:
+                suit = '&hearts;';
+                card.style.color = 'red';
+                break;
+            case 3:
+                suit = '&spades;';
+                card.style.color = 'black';
+                break;
+        }
+
+        card.innerHTML = value + suit;
+
+        hand_div.appendChild(card);
     }
 }
