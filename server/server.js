@@ -9,8 +9,6 @@ var connectionsSet = new Set(); // Set of connected pids (not just those in a ga
 
 console.log("Listening on port 8000...");
 wss.on('connection', (ws, req) => {
-    console.log(`Connection created: ${req.connection.remoteAddress}`);
-
     // Send a message on initial connection
     let initial = {type: 'notification', text: `Players: ${wss.clients.size}`};
     ws.send(JSON.stringify(initial));
@@ -22,6 +20,8 @@ wss.on('connection', (ws, req) => {
     } while (connectionsSet.has(pid));
     connectionsSet.add(pid);
     ws.pid = pid
+
+    console.log(`Connection created\tIP: ${req.connection.remoteAddress}\tPID: ${pid}`);
 
     // Handle messages from client
     ws.on('message', (data) => {
@@ -45,7 +45,7 @@ wss.on('connection', (ws, req) => {
 
     // Handle disconnect
     ws.on('close', (code) => {
-        console.log(`Connection closed: ${req.connection.remoteAddress}`);
+        console.log(`Connection closed;\tPID: ${ws.pid}`);
     })
 });
 
@@ -57,13 +57,13 @@ function createGame(ws) {
     if (pidTable.hasOwnProperty(ws.pid))
         return {type: 'creategame', id: null, success: false};
 
-    console.log("Creating game");
-
     // Repeatedly generate an ID until one is unique
     let gameid;
     do {
         gameid = crypto.randomBytes(3).toString('hex');
     } while (gamesTable.hasOwnProperty(gameid));
+
+    console.log(`Creating game\tGID: ${gameid}\tPID: ${ws.pid}`);
 
     gamesTable[gameid] = new Game();
     gamesTable[gameid].addPlayer(ws.pid);
@@ -82,10 +82,15 @@ function joinGame(ws, gameid) {
     if (pidTable.hasOwnProperty(ws.pid) || !gamesTable.hasOwnProperty(gameid))
         return {type: 'joingame', id: null, success: false};
 
-    console.log("Joining game");
+    console.log(`Joining game\tGID: ${gameid}\tPID: ${ws.pid}`);
 
-    // TODO: Ensure that adding a player is possible via try catch
-    gamesTable[gameid].addPlayer(ws.pid);
+    // Attempt to add player to game
+    try {
+        gamesTable[gameid].addPlayer(ws.pid);
+    } catch (error) {
+        console.error(error);
+        return {type: 'joingame', id: null, success: false};
+    }
     pidTable[ws.pid] = ws;
 
     // Update the members of the game with the player count
@@ -107,7 +112,10 @@ function startGame(ws, gameid) {
     let players = gamesTable[gameid].getPlayers();
 
     // Verify that ws is actually a part of game gameid
+    // TODO: Maybe make this return something instead of throw?
     if (!players.includes(ws.pid)) throw "Invalid attempt to start game";
+
+    console.log(`Starting game\tGID: ${gameid}`);
 
     game.shuffle();
     game.deal();
