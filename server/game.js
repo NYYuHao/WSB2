@@ -82,22 +82,6 @@ class Game {
         let suit = h[0]%4;
         return h.every((card) => card%4 == suit);
     }
-    
-    // Return true if h is a full house
-    static isFullHouse(h) {
-        if (h.length != 5) return false;
-        let cardCount = new Map();
-        for (let i = 0; i < 5; i++) {
-            let value = Math.floor(h[i]/4);
-            let count = cardCount.has(value) ? cardCount.get(value) + 1 : 1;
-            cardCount.set(value, count);
-        }
-        if (cardCount.size == 2) {
-            let countArray = cardCount.values().sort()
-            return countArray[0] == 2 && countArray[1] == 3;
-        }
-        return false;
-    }
 
     // Return true if h is a full house
     static isFullHouse(h) {
@@ -225,7 +209,7 @@ class Game {
                     return Math.max(...fh1) < Math.max(...fh2);
                 return true;
             }
-            // fh2 is an invalid 5 card
+            // fh2 is an invalid five card hand
             return false;
         }
         // fh1 or fh2 is an invalid hand
