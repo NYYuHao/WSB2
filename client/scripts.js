@@ -124,7 +124,7 @@ function renderHand(hand) {
                 break;
         }
 
-        card.innerHTML = value + suit;
+        card.innerHTML = '<p>' + value + '<br>' + suit + '</p>';
 
         hand_div.appendChild(card);
     }

@@ -1,0 +1,18 @@
+.card {
+    font-size: 2vw;
+    border: 1px solid black;
+    border-radius: 5px;
+    width: 6.67vw;
+    height: 9.33vw;
+    line-height: 9.33vw;
+    text-align: center;
+    display: inline-block;
+    margin: .4vw;
+    box-shadow: .2vw .2vw .3vw gray;
+}
+
+.card p {
+    line-height: 1;
+    display: inline-block;
+    vertical-align: middle;
+}

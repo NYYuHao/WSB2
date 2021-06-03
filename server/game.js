@@ -28,6 +28,9 @@ class Game {
         }
     }
 
+
+    // Server logic
+
     // Return an array copy of the player hand belonging to player id pid
     getHand(pid) {
         return Array.from(this.playerHands[this.playerOrder[pid]]);
@@ -43,6 +46,9 @@ class Game {
     getPlayers() {
         return Object.keys(this.playerOrder);
     }
+
+
+    // Game logic
 
     // Return true if h is a pair
     static isPair(h) {
