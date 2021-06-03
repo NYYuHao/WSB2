@@ -7,12 +7,17 @@
     line-height: 9.33vw;
     text-align: center;
     display: inline-block;
-    margin: .4vw;
+    margin: .2vw;
     box-shadow: .2vw .2vw .3vw gray;
+    transition: background 0.2s;
 }
 
 .card p {
     line-height: 1;
     display: inline-block;
     vertical-align: middle;
+}
+
+.card:hover {
+    background: #E2E2E2;
 }
