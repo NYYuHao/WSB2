@@ -1,3 +1,8 @@
+.hand {
+    position: fixed;
+    bottom: 0%;
+}
+
 .card {
     font-size: 2vw;
     border: 1px solid black;
@@ -10,6 +15,7 @@
     margin: .2vw;
     box-shadow: .2vw .2vw .3vw gray;
     transition: background 0.2s;
+    background: #FFFFFF;
 }
 
 .card p {
@@ -29,3 +35,8 @@
 .selected {
     background: #B5B5B5;
 }
+
+.plays {
+    
+}
+

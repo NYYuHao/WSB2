@@ -98,6 +98,7 @@ function startGameHTML() {
 // Render the hand returned by the server
 // Use when game first starts
 function renderHand(hand) {
+    hand_div.innerHTML = "Your hand: <br>";
     hand.sort((a, b) => a-b);
     for (let i = 0; i < hand.length; i++) {
 
