@@ -8,6 +8,9 @@ const num_players = document.getElementById("num-players");
 const hand_div = document.getElementById("hand");
 var gameid = null;
 
+let handCards = new Set()       // Set representing client hand
+let selectedCards = new Set()   // Set representing selected cards
+
 ws.onmessage = function(msg) {
     var data = JSON.parse(msg.data);
     
@@ -66,6 +69,20 @@ function startGame() {
     ws.send(JSON.stringify(data));
 }
 
+// Select or deselect a card by adding/removing it in selectedCards
+// cardDiv refers to the card element
+// cardVal refers to the numerical value
+function selectCard(cardDiv, cardVal) {
+    if (cardDiv.classList.contains('unselected')) {
+        selectedCards.add(cardVal);
+        cardDiv.className = 'card selected';
+    }
+    else {
+        selectedCards.delete(cardVal);
+        cardDiv.className = 'card unselected';
+    }
+}
+
 
 // HTML Updates
 
@@ -83,8 +100,13 @@ function startGameHTML() {
 function renderHand(hand) {
     hand.sort((a, b) => a-b);
     for (let i = 0; i < hand.length; i++) {
+
+        // Add card to client's hand
+        handCards.add(hand[i]);
+
+        // Create div to render card
         let card = document.createElement("div");
-        card.className = 'card';
+        card.className = 'card unselected';
         
         // Card value
         let value = Math.floor((hand[i]+4)/4).toString();
@@ -125,7 +147,7 @@ function renderHand(hand) {
         }
 
         card.innerHTML = '<p>' + value + '<br>' + suit + '</p>';
-
+        card.addEventListener('click', () => selectCard(card, hand[i]));
         hand_div.appendChild(card);
     }
 }

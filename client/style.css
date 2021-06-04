@@ -21,3 +21,11 @@
 .card:hover {
     background: #E2E2E2;
 }
+
+.unselected {
+    background: #FFFFFF;
+}
+
+.selected {
+    background: #B5B5B5;
+}
