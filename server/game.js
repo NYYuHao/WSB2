@@ -47,6 +47,10 @@ class Game {
         return Object.keys(this.playerOrder);
     }
 
+    // Start the game (i.e. determine player order, return start pid)
+    startGame() {
+        // TODO: Which player has closest to 3ofD?
+    }
 
     // Game logic
 

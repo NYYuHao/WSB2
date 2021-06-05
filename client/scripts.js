@@ -83,6 +83,11 @@ function selectCard(cardDiv, cardVal) {
     }
 }
 
+// Attempt to send the selected cards
+function sendCards(cards) {
+    
+}
+
 
 // HTML Updates
 
@@ -98,7 +103,14 @@ function startGameHTML() {
 // Render the hand returned by the server
 // Use when game first starts
 function renderHand(hand) {
-    hand_div.innerHTML = "Your hand: <br>";
+    // Create a send button for sending cards
+    let sendButton = document.createElement("button");
+    sendButton.id = "send-button";
+    sendButton.onmouseup = sendCards;
+    sendButton.innerHTML = "Play cards";
+    hand_div.appendChild(sendButton);
+
+    // Render the cards
     hand.sort((a, b) => a-b);
     for (let i = 0; i < hand.length; i++) {
 
