@@ -4,8 +4,11 @@ const message_div = document.getElementById("message-div");
 const join_form = document.getElementById("join-form");
 const main_canvas = document.getElementById("main-canvas");
 const start_div = document.getElementById("start-div");
+const start_button = document.getElementById("start-button");
 const num_players = document.getElementById("num-players");
 const hand_div = document.getElementById("hand");
+const send_button = document.getElementById("send-button");
+const pass_button = document.getElementById("pass-button");
 var gameid = null;
 
 let handCards = new Set()       // Set representing client hand
@@ -23,7 +26,7 @@ ws.onmessage = function(msg) {
             if (data.success) {
                 message_div.innerHTML = `Game code: ${data.id}`;
                 gameid = data.id;
-                startGameHTML();
+                displayStart();
             }
             else
                 console.error('ERROR: Cannot create/join game');
@@ -33,6 +36,9 @@ ws.onmessage = function(msg) {
             break;
         case 'gethand':
             renderHand(data.hand);
+            break;
+        case 'turnstart':
+            displayTurn();
             break;
     }
 }
@@ -84,32 +90,16 @@ function selectCard(cardDiv, cardVal) {
 }
 
 // Attempt to send the selected cards
-function sendCards(cards) {
+function sendCards() {
     
 }
 
 
 // HTML Updates
 
-// Update the HTML with the start game button
-function startGameHTML() {
-    var startButton = document.createElement("button");
-    startButton.id = "start-button";
-    startButton.onmouseup = startGame;
-    startButton.innerHTML = "Start Game";
-    start_div.appendChild(startButton);
-}
-
 // Render the hand returned by the server
 // Use when game first starts
 function renderHand(hand) {
-    // Create a send button for sending cards
-    let sendButton = document.createElement("button");
-    sendButton.id = "send-button";
-    sendButton.onmouseup = sendCards;
-    sendButton.innerHTML = "Play cards";
-    hand_div.appendChild(sendButton);
-
     // Render the cards
     hand.sort((a, b) => a-b);
     for (let i = 0; i < hand.length; i++) {
@@ -163,4 +153,15 @@ function renderHand(hand) {
         card.addEventListener('click', () => selectCard(card, hand[i]));
         hand_div.appendChild(card);
     }
+}
+
+// Update the HTML with the start game button
+function displayStart() {
+    start_button.style.display = 'block';
+}
+
+// When it's the user's turn, display send and pass button
+function displayTurn() {
+    send_button.style.display = 'block';
+    pass_button.style.display = 'block';
 }

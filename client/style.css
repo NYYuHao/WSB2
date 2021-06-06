@@ -1,3 +1,7 @@
+.default-button {
+    display: none;
+}
+
 .hand {
     position: fixed;
     bottom: 0%;
