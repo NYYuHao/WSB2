@@ -127,5 +127,5 @@ function startGame(ws, gameid) {
         ));
     }
 
-    // TODO: Rest of game start logic, return success
+    // TODO: Rest of game start logic, return success, send 'turnstart' to ws
 }

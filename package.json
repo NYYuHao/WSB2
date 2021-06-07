@@ -4,6 +4,7 @@
     "ws": "^7.4.5"
   },
   "scripts": {
-    "start": "node server/server.js"
+    "start": "node server/server.js",
+    "test": "node test/gameTest.js"
   }
 }

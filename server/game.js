@@ -49,7 +49,17 @@ class Game {
 
     // Start the game (i.e. determine player order, return start pid)
     startGame() {
-        // TODO: Which player has closest to 3ofD?
+        // TODO: Assert that game has players?
+        // Find which player has closest to 3ofD
+        let mins = [];
+        for (let i = 0; i < this.numPlayers; i++ ) {
+            let fh = Array.from(this.playerHands[i])
+                .map((card) => (card < 8) ? card + 52 : card);
+            mins.push(Math.min(...fh));
+        }
+        let firstPlayerInd = mins.indexOf(Math.min(...mins));
+        return Object.keys(this.playerOrder)
+            .find((pid) => this.playerOrder[pid] == firstPlayerInd);
     }
 
     // Game logic

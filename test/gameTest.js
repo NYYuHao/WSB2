@@ -4,6 +4,15 @@ const game = new Game();
 // Shuffle and deal
 game.shuffle();
 game.deal();
+game.addPlayer('player1');
+game.addPlayer('player2');
+game.addPlayer('player3');
+game.addPlayer('player4');
+console.log(game.getHand('player1'));
+console.log(game.getHand('player2'));
+console.log(game.getHand('player3'));
+console.log(game.getHand('player4'));
+console.log(game.startGame());
 
 let single1 = [8];
 let single2 = [9];
