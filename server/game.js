@@ -169,7 +169,7 @@ class Game {
         for (let value in cardCount) {
             if (cardCount[value] > count ||
                 (cardCount[value] == count && value > mode)) {
-                mode = value;
+                mode = parseInt(value);
                 count = cardCount[value];
             }
         }
