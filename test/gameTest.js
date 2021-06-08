@@ -121,6 +121,7 @@ console.assert(Game.compareHands(cstraight2, cflush1));
 console.assert(Game.compareHands(cinv1, cflush1));
 console.assert(!Game.compareHands(cflush1, cinv1));
 // Full Houses
+// TODO: Test [ 8, 9, 11, 21, 22 ] [ 4, 5, 6, 32, 34 ]
 let cfullhouse1 = [8, 9, 10, 12, 13] // 3s
 let cfullhouse2 = [8, 9, 12, 13, 14] // 4s
 console.assert(Game.compareHands(cfullhouse1, cfullhouse2));

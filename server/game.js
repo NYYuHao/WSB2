@@ -3,10 +3,12 @@
 class Game {
     constructor() {
         this.deck = [...Array(52).keys()]; // 0, 1, 2, 3 are Aces (D, C, H, S)
-        this.currentPlayer = 0;
         this.numPlayers = 0;
+        this.currentPlayer = 0;
+        this.turn = 0;
         this.playerHands = [new Set(), new Set(), new Set(), new Set()];
-        this.playerOrder = {};
+        this.playerOrder = {}; // {pid: playernum} pairs
+        this.lastCards = []; // Most recent play
     }
 
     // Shuffle the current deck
@@ -57,9 +59,32 @@ class Game {
                 .map((card) => (card < 8) ? card + 52 : card);
             mins.push(Math.min(...fh));
         }
-        let firstPlayerInd = mins.indexOf(Math.min(...mins));
+        this.currentPlayer = mins.indexOf(Math.min(...mins));
         return Object.keys(this.playerOrder)
-            .find((pid) => this.playerOrder[pid] == firstPlayerInd);
+            .find((pid) => this.playerOrder[pid] == this.currentPlayer);
+    }
+
+    // Play a turn with the given cards
+    playTurn(pid, cards) {
+        let playerNum = this.playerOrder[pid];
+        // Make sure it's the player's turn
+        if (playerNum != this.currentPlayer)
+            return false;
+        console.log("Success");
+        // Make sure all the cards are owned by the player
+        if (!cards.every((card) => this.playerHands[playerNum].has(card)))
+            return false;
+        console.log("Success");
+        // Make sure hand is playable
+        if (!Game.compareHands(this.lastCards, cards))
+            return false;
+        console.log("Success");
+        // Remove cards from hand
+        cards.forEach((card) => this.playerHands[playerNum].delete(card));
+        this.lastCards = cards;
+        this.currentPlayer = (this.currentPlayer+1)%this.numPlayers;
+        this.turn++;
+        return {currentPlayer: this.currentPlayer, turn: this.turn};
     }
 
     // Game logic
@@ -155,9 +180,8 @@ class Game {
     // h1 and h2 are arrays of unique cards
     // Returns true if h2 is a valid, stronger hand than h1
     static compareHands(h1, h2) {
-        if (h1.length != h2.length) {
-            return false;
-        }
+        if (h1.length == 0) return true;
+        if (h1.length != h2.length) return false;
 
         // "Fix" the cards so that As and 2s are highest value
         let fh1 = h1.map((card) => (card < 8) ? card + 52 : card);

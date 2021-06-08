@@ -40,6 +40,9 @@ ws.onmessage = function(msg) {
         case 'turnstart':
             displayTurn();
             break;
+        case 'playsuccess':
+            undisplayTurn();
+            break;
     }
 }
 
@@ -71,7 +74,7 @@ function startGame() {
     var data = {
         type: "startgame",
         gameid: gameid
-    }
+    };
     ws.send(JSON.stringify(data));
 }
 
@@ -91,7 +94,12 @@ function selectCard(cardDiv, cardVal) {
 
 // Attempt to send the selected cards
 function sendCards() {
-    
+    var data = {
+        type: "playturn",
+        gameid: gameid,
+        cards: Array.from(selectedCards)
+    };
+    ws.send(JSON.stringify(data));
 }
 
 
@@ -164,4 +172,11 @@ function displayStart() {
 function displayTurn() {
     send_button.style.display = 'block';
     pass_button.style.display = 'block';
+}
+
+// After the user takes their turn, undisplay send and pass
+// and display the played hand
+function undisplayTurn() {
+    send_button.style.display = 'none';
+    pass_button.style.display = 'none';
 }
