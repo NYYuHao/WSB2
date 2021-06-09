@@ -70,18 +70,27 @@ class Game {
         // Make sure it's the player's turn
         if (playerNum != this.currentPlayer)
             return false;
-        console.log("Success");
         // Make sure all the cards are owned by the player
         if (!cards.every((card) => this.playerHands[playerNum].has(card)))
             return false;
-        console.log("Success");
         // Make sure hand is playable
         if (!Game.compareHands(this.lastCards, cards))
             return false;
-        console.log("Success");
         // Remove cards from hand
         cards.forEach((card) => this.playerHands[playerNum].delete(card));
         this.lastCards = cards;
+        this.currentPlayer = (this.currentPlayer+1)%this.numPlayers;
+        this.turn++;
+        return {currentPlayer: this.currentPlayer, turn: this.turn};
+    }
+
+    // Pass pid's turn
+    passTurn(pid, cards) {
+        let playerNum = this.playerOrder[pid];
+        // Make sure it's the player's turn
+        if (playerNum != this.currentPlayer)
+            return false;
+        // TODO: Logic to see whether lastPlayed should be reset
         this.currentPlayer = (this.currentPlayer+1)%this.numPlayers;
         this.turn++;
         return {currentPlayer: this.currentPlayer, turn: this.turn};

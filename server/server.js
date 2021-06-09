@@ -40,6 +40,9 @@ wss.on('connection', (ws, req) => {
             case "playturn":
                 ws.send(JSON.stringify(playTurn(ws, msg.gameid, msg.cards)));
                 break;
+            case "passturn":
+                ws.send(JSON.stringify(passTurn(ws, msg.gameid)));
+                break;
             default:
                 console.error("ERROR: Unrecognized message type");
                 break;
@@ -147,8 +150,27 @@ function playTurn(ws, gameid, cards) {
         ws.send(JSON.stringify({type: 'playsuccess', turn: turnResult.turn}));
         pidTable[game.getPlayers()[turnResult.currentPlayer]].send(
             JSON.stringify({type: 'turnstart'}));
+        // TODO: Update every player to display this play
     }
     else {
         console.error('Invalid attempt to play cards');
+    }
+}
+
+// Attempt to pass a turn for ws
+function passTurn(ws, gameid) {
+    let game = gamesTable[gameid];
+
+    console.log(`Passing turn\tGID: ${gameid}`);
+
+    let turnResult = game.passTurn(ws.pid)
+    if (turnResult) {
+        ws.send(JSON.stringify({type: 'passsuccess', turn: turnResult.turn}));
+        pidTable[game.getPlayers()[turnResult.currentPlayer]].send(
+            JSON.stringify({type: 'turnstart'}));
+        // TODO: Update every player to display this pass
+    }
+    else {
+        console.error('Invalid attempt to pass turn');
     }
 }

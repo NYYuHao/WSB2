@@ -11,8 +11,9 @@ const send_button = document.getElementById("send-button");
 const pass_button = document.getElementById("pass-button");
 var gameid = null;
 
-let handCards = new Set()       // Set representing client hand
-let selectedCards = new Set()   // Set representing selected cards
+let handCards = new Set()           // Set representing client hand
+let selectedCards = new Set()       // Set representing selected cards
+let selectedCardDivs = new Set()    // Set representing selected divs
 
 ws.onmessage = function(msg) {
     var data = JSON.parse(msg.data);
@@ -41,6 +42,10 @@ ws.onmessage = function(msg) {
             displayTurn();
             break;
         case 'playsuccess':
+            undisplayTurn();
+            clearSets();
+            break;
+        case 'passsuccess':
             undisplayTurn();
             break;
     }
@@ -84,10 +89,12 @@ function startGame() {
 function selectCard(cardDiv, cardVal) {
     if (cardDiv.classList.contains('unselected')) {
         selectedCards.add(cardVal);
+        selectedCardDivs.add(cardDiv);
         cardDiv.className = 'card selected';
     }
     else {
         selectedCards.delete(cardVal);
+        selectedCardDivs.delete(cardDiv);
         cardDiv.className = 'card unselected';
     }
 }
@@ -102,12 +109,19 @@ function sendCards() {
     ws.send(JSON.stringify(data));
 }
 
-
-// HTML Updates
+// Attempt to pass turn
+function passTurn() {
+    var data = {
+        type: "passturn",
+        gameid: gameid
+    };
+    ws.send(JSON.stringify(data));
+}
 
 // Render the hand returned by the server
 // Use when game first starts
 function renderHand(hand) {
+    hand.innerHTML = "";
     // Render the cards
     hand.sort((a, b) => a-b);
     for (let i = 0; i < hand.length; i++) {
@@ -175,8 +189,14 @@ function displayTurn() {
 }
 
 // After the user takes their turn, undisplay send and pass
-// and display the played hand
 function undisplayTurn() {
     send_button.style.display = 'none';
     pass_button.style.display = 'none';
+}
+
+// Clears the selected cards and removes them from display
+function clearSets() {
+    selectedCardDivs.forEach((div) => div.remove());
+    selectedCards.clear();
+    selectedCardDivs.clear();
 }
