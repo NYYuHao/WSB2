@@ -38,6 +38,7 @@ ws.onmessage = function(msg) {
             break;
         case 'gethand':
             renderHand(data.hand);
+            undisplaySettings();
             break;
         case 'turnstart':
             displayTurn();
@@ -85,7 +86,6 @@ function startGame() {
         gameid: gameid
     };
     ws.send(JSON.stringify(data));
-    undisplaySettings();
 }
 
 // Select or deselect a card by adding/removing it in selectedCards
