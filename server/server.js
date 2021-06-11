@@ -150,7 +150,10 @@ function playTurn(ws, gameid, cards) {
         ws.send(JSON.stringify({type: 'playsuccess', turn: turnResult.turn}));
         pidTable[game.getPlayers()[turnResult.currentPlayer]].send(
             JSON.stringify({type: 'turnstart'}));
-        // TODO: Update every player to display this play
+        game.getPlayers().forEach((pid) => pidTable[pid].send(
+            JSON.stringify({
+                type: 'turncards', turn: turnResult.turn, cards: cards
+            })));
     }
     else {
         console.error('Invalid attempt to play cards');

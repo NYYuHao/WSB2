@@ -6,6 +6,7 @@ const main_canvas = document.getElementById("main-canvas");
 const start_div = document.getElementById("start-div");
 const start_button = document.getElementById("start-button");
 const num_players = document.getElementById("num-players");
+const plays_div = document.getElementById("plays");
 const hand_div = document.getElementById("hand");
 const send_button = document.getElementById("send-button");
 const pass_button = document.getElementById("pass-button");
@@ -47,6 +48,9 @@ ws.onmessage = function(msg) {
             break;
         case 'passsuccess':
             undisplayTurn();
+            break;
+        case 'turncards':
+            displayTurnCards(data.cards, data.turn);
             break;
     }
 }
@@ -199,4 +203,11 @@ function clearSets() {
     selectedCardDivs.forEach((div) => div.remove());
     selectedCards.clear();
     selectedCardDivs.clear();
+}
+
+// Displays the cards played in the previous turn
+function displayTurnCards(cards, turn) {
+    let play = document.createElement('div');
+    play.innerHTML = `Turn ${turn}: ` + cards;
+    plays_div.appendChild(play);
 }
