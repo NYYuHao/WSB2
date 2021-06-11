@@ -9,36 +9,38 @@
         <h1>WSB2</h1>
         <div id="message-div"></div>
 
-        <button type="button" id="create-button" onmouseup="createGame()">
-            Create Game
-        </button>
-
-        <form id="join-form">
-            <label for="code">Code:</label><br>
-            <input type="text" id="code"></input>
-            <input type="button" id="join-button" onmouseup="joinGame()"
-            value="Join Game"></input>
-        </form>
-
-        <div id="start-div">
-            <p id="num-players"></p>
-            <button type="button" class="default-button" id="start-button"
-                onmouseup="startGame()">
-                Start Game
+        <div class="game-settings" id="game-settings">
+            <button type="button" id="create-button" onmouseup="createGame()">
+                Create Game
             </button>
-        </div>
 
-        <br>
-        <button type="button" id="disconnect-button" onmouseup="disconnect()">
-            Disconnect
-        </button>
-        <br>
+            <form id="join-form">
+                <label for="code">Code:</label><br>
+                <input type="text" id="code"></input>
+                <input type="button" id="join-button" onmouseup="joinGame()"
+                value="Join Game"></input>
+            </form>
+
+            <div id="start-div">
+                <p id="num-players"></p>
+                <button type="button" class="default-button" id="start-button"
+                    onmouseup="startGame()">
+                    Start Game
+                </button>
+            </div>
+
+            <br>
+            <button type="button" id="disconnect-button" onmouseup="disconnect()">
+                Disconnect
+            </button>
+            <br>
+        </div>
 
         <div class="plays" id="plays">
         </div>
 
 
-        <div class="hand" id="hand">
+        <div class="control" id="control">
             <button type="button" class="default-button" id="send-button"
                 onmouseup="sendCards()">
                 Play Cards
@@ -47,6 +49,8 @@
                 onmouseup="passTurn()">
                 Pass Turn
             </button>
+            <div class="hand" id="hand">
+            </div>
         </div>
     </body>
 </html>

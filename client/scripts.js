@@ -2,7 +2,7 @@ const ws = new WebSocket("ws://localhost:8000");
 
 const message_div = document.getElementById("message-div");
 const join_form = document.getElementById("join-form");
-const main_canvas = document.getElementById("main-canvas");
+const game_settings_div = document.getElementById("game-settings");
 const start_div = document.getElementById("start-div");
 const start_button = document.getElementById("start-button");
 const num_players = document.getElementById("num-players");
@@ -85,6 +85,7 @@ function startGame() {
         gameid: gameid
     };
     ws.send(JSON.stringify(data));
+    undisplaySettings();
 }
 
 // Select or deselect a card by adding/removing it in selectedCards
@@ -120,6 +121,14 @@ function passTurn() {
         gameid: gameid
     };
     ws.send(JSON.stringify(data));
+}
+
+
+// HTML Updates
+
+// Remove the game settings div
+function undisplaySettings() {
+    game_settings_div.style.display = 'none';
 }
 
 // Render the hand returned by the server

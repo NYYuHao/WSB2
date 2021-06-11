@@ -2,29 +2,34 @@
     display: none;
 }
 
-.hand {
+.control {
     position: fixed;
     bottom: 0%;
 }
 
+.hand {
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: flex-start;
+}
+
 .card {
-    font-size: 2vw;
+    font-size: 40px;
     border: 1px solid black;
     border-radius: 5px;
-    width: 6.67vw;
-    height: 9.33vw;
-    line-height: 9.33vw;
+    width: 100px;
+    height: 140px;
+    line-height: 140px;
     text-align: center;
     display: inline-block;
-    margin: .2vw;
-    box-shadow: .2vw .2vw .3vw gray;
+    margin: 10px;
+    box-shadow: 2px 2px 3px gray;
     transition: background 0.2s;
     background: #FFFFFF;
 }
 
 .card p {
     line-height: 1;
-    display: inline-block;
     vertical-align: middle;
 }
 
