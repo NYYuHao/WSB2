@@ -123,6 +123,49 @@ function passTurn() {
     ws.send(JSON.stringify(data));
 }
 
+// Turn card into object for HTML
+// e.g. 3 --> {A, Spade, Black}
+function cardToObject(card) {
+    let value = Math.floor((card+4)/4).toString();
+    switch (value) {
+        case '1': 
+            value = 'A';
+            break;
+        case '11':
+            value = 'J';
+            break;
+        case '12':
+            value = 'Q';
+            break;
+        case '13':
+            value = 'K';
+            break;
+    }
+
+    // Card suit
+    let suit = card%4;
+    let color;
+    switch (suit) {
+        case 0:
+            suit = '&diams;';
+            color = 'red';
+            break;
+        case 1:
+            suit = '&clubs;';
+            color = 'black';
+            break;
+        case 2:
+            suit = '&hearts;';
+            color = 'red';
+            break;
+        case 3:
+            suit = '&spades;';
+            color = 'black';
+            break;
+    }
+    return {value: value, suit: suit, color: color};
+}
+
 
 // HTML Updates
 
@@ -146,45 +189,10 @@ function renderHand(hand) {
         let card = document.createElement("div");
         card.className = 'card unselected';
         
-        // Card value
-        let value = Math.floor((hand[i]+4)/4).toString();
-        switch (value) {
-            case '1': 
-                value = 'A';
-                break;
-            case '11':
-                value = 'J';
-                break;
-            case '12':
-                value = 'Q';
-                break;
-            case '13':
-                value = 'K';
-                break;
-        }
+        let stats = cardToObject(hand[i]);
 
-        // Card suit
-        let suit = hand[i]%4;
-        switch (suit) {
-            case 0:
-                suit = '&diams;';
-                card.style.color = 'red';
-                break;
-            case 1:
-                suit = '&clubs;';
-                card.style.color = 'black';
-                break;
-            case 2:
-                suit = '&hearts;';
-                card.style.color = 'red';
-                break;
-            case 3:
-                suit = '&spades;';
-                card.style.color = 'black';
-                break;
-        }
-
-        card.innerHTML = '<p>' + value + '<br>' + suit + '</p>';
+        card.innerHTML = '<p>' + stats.value + '<br>' + stats.suit + '</p>';
+        card.style.color = stats.color;
         card.addEventListener('click', () => selectCard(card, hand[i]));
         hand_div.appendChild(card);
     }
@@ -215,8 +223,18 @@ function clearSets() {
 }
 
 // Displays the cards played in the previous turn
-function displayTurnCards(cards, turn) {
-    let play = document.createElement('div');
-    play.innerHTML = `Turn ${turn}: ` + cards;
-    plays_div.appendChild(play);
+function displayTurnCards(cards, turnNum) {
+    let turn = document.createElement('div');
+    turn.innerHTML = `Turn ${turnNum}: `;
+    turn.className = 'turn';
+    // Render every played card
+    for (let i = 0; i < cards.length; i++) {
+        let card = document.createElement('div');
+        card.className = "played-card";
+        let stats = cardToObject(cards[i]);
+        card.innerHTML = stats.value + stats.suit;
+        card.style.color = stats.color;
+        turn.appendChild(card);
+    }
+    plays_div.appendChild(turn);
 }

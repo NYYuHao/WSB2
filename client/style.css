@@ -21,7 +21,6 @@
     height: 140px;
     line-height: 140px;
     text-align: center;
-    display: inline-block;
     margin: 10px;
     box-shadow: 2px 2px 3px gray;
     transition: background 0.2s;
@@ -46,6 +45,22 @@
 }
 
 .plays {
-    
+    display: flex;
+    flex-flow: column flex-start;
 }
 
+.turn {
+    display: flex;
+    align-items: center;
+}
+
+.played-card {
+    font-size: 20px;
+    border: 1px solid black;
+    border-radius: 5px;
+    width: 40px;
+    height: 56px;
+    line-height: 56px;
+    text-align: center;
+    margin: 5px;
+}
