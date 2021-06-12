@@ -6,6 +6,7 @@ class Game {
         this.numPlayers = 0;
         this.currentPlayer = 0;
         this.turn = 0;
+        this.consPasses = 0;
         this.playerHands = [new Set(), new Set(), new Set(), new Set()];
         this.playerOrder = {}; // {pid: playernum} pairs
         this.lastCards = []; // Most recent play
@@ -76,11 +77,19 @@ class Game {
         // Make sure hand is playable
         if (!Game.compareHands(this.lastCards, cards))
             return false;
+        // In the first turn, make sure the lowest card is played
+        if (this.turn == 0 &&
+            !cards.includes(Math.min(...Array.from(this.playerHands[playerNum])
+                .map((card) => (card < 8) ? card + 52 : card))))
+            return false;
         // Remove cards from hand
         cards.forEach((card) => this.playerHands[playerNum].delete(card));
         this.lastCards = cards;
         this.currentPlayer = (this.currentPlayer+1)%this.numPlayers;
         this.turn++;
+        this.consPasses = 0;
+        // TODO: Sometimes this doesn't properly handle turns?
+        // Occured on Player 1 playing 16
         return {currentPlayer: this.currentPlayer, turn: this.turn};
     }
 
@@ -90,9 +99,15 @@ class Game {
         // Make sure it's the player's turn
         if (playerNum != this.currentPlayer)
             return false;
-        // TODO: Logic to see whether lastPlayed should be reset
+        // Only allow passes when some cards have been played
+        if (this.lastCards.length == 0)
+            return false;
         this.currentPlayer = (this.currentPlayer+1)%this.numPlayers;
         this.turn++;
+        // If all players passed, reset lastCards
+        this.consPasses++;
+        if (this.consPasses == this.numPlayers-1)
+            this.lastCards = [];
         return {currentPlayer: this.currentPlayer, turn: this.turn};
     }
 
