@@ -46,12 +46,15 @@
 
 .plays {
     display: flex;
-    flex-flow: column;
+    flex-flow: column wrap;
+    justify-content: flex-start;
+    height: 480px;
 }
 
 .turn {
     display: flex;
     align-items: center;
+    width: 350px;
 }
 
 .played-card {
