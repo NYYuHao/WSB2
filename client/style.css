@@ -45,11 +45,16 @@
 }
 
 .plays {
-    display: flex;
+    display: none;
+    margin: auto;
     flex-flow: column wrap;
     justify-content: flex-start;
     align-content: flex-start;
-    height: 480px;
+    height: 340px;
+    width: 330px;
+    background: lightgray;
+    padding: 10px;
+    border-radius: 10px;
 }
 
 .turn {
@@ -68,4 +73,5 @@
     line-height: 56px;
     text-align: center;
     margin: 5px;
+    background: white;
 }

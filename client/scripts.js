@@ -11,6 +11,7 @@ const hand_div = document.getElementById("hand");
 const send_button = document.getElementById("send-button");
 const pass_button = document.getElementById("pass-button");
 var gameid = null;
+var numPlays = 0;
 
 let handCards = new Set()           // Set representing client hand
 let selectedCards = new Set()       // Set representing selected cards
@@ -172,9 +173,10 @@ function cardToObject(card) {
 
 // HTML Updates
 
-// Remove the game settings div
+// Remove the game settings div and display plays
 function undisplaySettings() {
     game_settings_div.style.display = 'none';
+    plays_div.style.display = 'flex';
 }
 
 // Render the hand returned by the server
@@ -225,6 +227,15 @@ function clearSets() {
     selectedCardDivs.clear();
 }
 
+// Adds a div turn to plays, removing old ones if necessary
+function addPlay(turn) {
+    plays_div.appendChild(turn);
+    if (numPlays >= 4)
+        plays_div.removeChild(plays_div.childNodes[0]);
+    else
+        numPlays++;
+}
+
 // Displays the cards played in the previous turn
 function displayTurnCards(cards, turnNum) {
     let turn = document.createElement('div');
@@ -239,7 +250,7 @@ function displayTurnCards(cards, turnNum) {
         card.style.color = stats.color;
         turn.appendChild(card);
     }
-    plays_div.appendChild(turn);
+    addPlay(turn);
 }
 
 // Display a turn pass
@@ -247,5 +258,5 @@ function displayTurnPass(turnNum) {
     let turn = document.createElement('div');
     turn.innerHTML = `Turn ${turnNum}: Pass`;
     turn.className = 'turn';
-    plays_div.appendChild(turn);
+    addPlay(turn);
 }
