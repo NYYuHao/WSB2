@@ -111,6 +111,7 @@ class Game {
         return {currentPlayer: this.currentPlayer, turn: this.turn};
     }
 
+
     // Game logic
 
     // Return true if h is a pair

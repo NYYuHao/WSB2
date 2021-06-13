@@ -172,6 +172,10 @@ function passTurn(ws, gameid) {
         pidTable[game.getPlayers()[turnResult.currentPlayer]].send(
             JSON.stringify({type: 'turnstart'}));
         // TODO: Update every player to display this pass
+        game.getPlayers().forEach((pid) => pidTable[pid].send(
+            JSON.stringify({
+                type: 'turnpass', turn: turnResult.turn
+            })));
     }
     else {
         console.error('Invalid attempt to pass turn');

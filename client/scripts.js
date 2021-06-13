@@ -53,6 +53,9 @@ ws.onmessage = function(msg) {
         case 'turncards':
             displayTurnCards(data.cards, data.turn);
             break;
+        case 'turnpass':
+            displayTurnPass(data.turn);
+            break;
     }
 }
 
@@ -236,5 +239,13 @@ function displayTurnCards(cards, turnNum) {
         card.style.color = stats.color;
         turn.appendChild(card);
     }
+    plays_div.appendChild(turn);
+}
+
+// Display a turn pass
+function displayTurnPass(turnNum) {
+    let turn = document.createElement('div');
+    turn.innerHTML = `Turn ${turnNum}: Pass`;
+    turn.className = 'turn';
     plays_div.appendChild(turn);
 }
