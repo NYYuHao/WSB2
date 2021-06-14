@@ -1,16 +1,26 @@
 .default-button {
-    display: none;
+    display: inline-block;
+    width: 30%;
+    height: 100px;
 }
 
 .control {
     position: fixed;
     bottom: 0%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100%;
+}
+
+.game-buttons {
+    display: none;
+    justify-content: space-around;
 }
 
 .hand {
     display: flex;
     flex-flow: row wrap;
-    justify-content: flex-start;
+    justify-content: center;
 }
 
 .card {
@@ -55,6 +65,7 @@
     background: lightgray;
     padding: 10px;
     border-radius: 10px;
+    box-shadow: 2px 2px 3px gray;
 }
 
 .turn {
@@ -74,4 +85,8 @@
     text-align: center;
     margin: 5px;
     background: white;
+}
+
+.player-info {
+    
 }

@@ -8,8 +8,7 @@ const start_button = document.getElementById("start-button");
 const num_players = document.getElementById("num-players");
 const plays_div = document.getElementById("plays");
 const hand_div = document.getElementById("hand");
-const send_button = document.getElementById("send-button");
-const pass_button = document.getElementById("pass-button");
+const game_buttons_div = document.getElementById("game-buttons");
 var gameid = null;
 var numPlays = 0;
 
@@ -210,14 +209,12 @@ function displayStart() {
 
 // When it's the user's turn, display send and pass button
 function displayTurn() {
-    send_button.style.display = 'block';
-    pass_button.style.display = 'block';
+    game_buttons_div.style.display = 'flex';
 }
 
 // After the user takes their turn, undisplay send and pass
 function undisplayTurn() {
-    send_button.style.display = 'none';
-    pass_button.style.display = 'none';
+    game_buttons_div.style.display = 'none';
 }
 
 // Clears the selected cards and removes them from display
