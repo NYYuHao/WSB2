@@ -6,10 +6,12 @@
         <title>WSB2</title>
     </head>
     <body>
-        <h1>WSB2</h1>
+        <div class="info-box">
+            <div class="title">WSB2</div>
+        </div>
         <div id="message-div"></div>
 
-        <div class="game-settings" id="game-settings">
+        <div class="info-box game-settings" id="game-settings">
             <button type="button" id="create-button" onmouseup="createGame()">
                 Create Game
             </button>
@@ -23,7 +25,7 @@
 
             <div id="start-div">
                 <p id="num-players"></p>
-                <button type="button" class="default-button" id="start-button"
+                <button type="button" style="display:none" id="start-button"
                     onmouseup="startGame()">
                     Start Game
                 </button>
@@ -42,11 +44,11 @@
 
         <div class="control" id="control">
             <div class="game-buttons" id="game-buttons">
-                <button type="button" class="default-button" id="send-button"
+                <button type="button" class="game-button" id="send-button"
                     onmouseup="sendCards()">
                     Play Cards
                 </button>
-                <button type="button" class="default-button" id="pass-button"
+                <button type="button" class="game-button" id="pass-button"
                     onmouseup="passTurn()">
                     Pass Turn
                 </button>

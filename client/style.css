@@ -1,9 +1,25 @@
-.default-button {
-    display: inline-block;
-    width: 30%;
-    height: 100px;
+.info-box {
+    margin: 5px;
+    padding: 10px;
+    background: #EDEDED;
+    border: 2px solid #E3E3E3;
+    border-radius: 5px;
 }
 
+.title {
+    font-size: 30px;
+}
+
+.game-settings {
+    background: white;
+}
+
+/* Create, join, start buttons */ 
+.setting-button {
+    display: inline-block;
+}
+
+/* Container for game buttons and cards */
 .control {
     position: fixed;
     bottom: 0%;
@@ -12,17 +28,27 @@
     width: 100%;
 }
 
+/* Container for play and pass buttons */
 .game-buttons {
     display: none;
     justify-content: space-around;
 }
 
+/* Play and pass buttons */
+.game-button {
+    display: inline-block;
+    width: 30%;
+    height: 100px;
+}
+
+/* Container for cards in hand */
 .hand {
     display: flex;
     flex-flow: row wrap;
     justify-content: center;
 }
 
+/* Card (in hand only) */
 .card {
     font-size: 40px;
     border: 1px solid black;
@@ -54,6 +80,7 @@
     background: #B5B5B5;
 }
 
+/* Container for turns */
 .plays {
     display: none;
     margin: auto;
@@ -62,12 +89,13 @@
     align-content: flex-start;
     height: 340px;
     width: 330px;
-    background: lightgray;
+    background: #EDEDED;
     padding: 10px;
     border-radius: 10px;
     box-shadow: 2px 2px 3px gray;
 }
 
+/* A turn with cards or a pass */
 .turn {
     display: flex;
     align-items: center;
@@ -75,6 +103,7 @@
     height: 68px;
 }
 
+/* Cards that have been played */
 .played-card {
     font-size: 20px;
     border: 1px solid black;
@@ -87,6 +116,7 @@
     background: white;
 }
 
+/* Container for other player information */
 .player-info {
     
 }
