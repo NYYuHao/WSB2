@@ -126,6 +126,7 @@ function startGame(ws, gameid) {
     game.shuffle();
     game.deal();
     for (let i = 0; i < players.length; i++) {
+        // TODO: Also send 'startgame' with relevant player info
         pidTable[players[i]].send(JSON.stringify(
             {
                 type: 'gethand', hand: game.getHand(players[i])

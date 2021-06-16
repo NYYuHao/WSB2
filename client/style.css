@@ -1,9 +1,10 @@
 .info-box {
-    margin: 5px;
+    margin: 5px auto;
     padding: 10px;
     background: #EDEDED;
     border: 2px solid #E3E3E3;
     border-radius: 5px;
+    max-width: 1000px;
 }
 
 .title {
@@ -17,6 +18,16 @@
 /* Create, join, start buttons */ 
 .setting-button {
     display: inline-block;
+}
+
+/* Container for entire game */
+.game {
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: center;
+    align-items: center;
+    margin: auto;
+    max-width: 1000px;
 }
 
 /* Container for game buttons and cards */
@@ -83,7 +94,6 @@
 /* Container for turns */
 .plays {
     display: none;
-    margin: auto;
     flex-flow: column wrap;
     justify-content: flex-start;
     align-content: flex-start;
@@ -91,8 +101,8 @@
     width: 330px;
     background: #EDEDED;
     padding: 10px;
+    border: 2px solid #E3E3E3;
     border-radius: 10px;
-    box-shadow: 2px 2px 3px gray;
 }
 
 /* A turn with cards or a pass */
@@ -118,5 +128,11 @@
 
 /* Container for other player information */
 .player-info {
-    
+    display: none;
+    margin: 5px;
+    border: 2px solid #E3E3E3;
+    border-radius: 10px;
+    width: 140px;
+    height: 100px;
+    background: #EDEDED;
 }

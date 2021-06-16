@@ -9,9 +9,9 @@
         <div class="info-box">
             <div class="title">WSB2</div>
         </div>
-        <div id="message-div"></div>
 
         <div class="info-box game-settings" id="game-settings">
+            <div id="message-div"></div>
             <button type="button" id="create-button" onmouseup="createGame()">
                 Create Game
             </button>
@@ -38,22 +38,27 @@
             <br>
         </div>
 
-        <div class="plays" id="plays">
-        </div>
+        <div class="game">
+            <div class="player-info" id="top-player"></div>
+            <div style="width:100%"></div>
+            <div class="player-info" id="left-player"></div>
+            <div class="plays" id="plays"></div>
+            <div class="player-info" id="right-player"></div>
 
 
-        <div class="control" id="control">
-            <div class="game-buttons" id="game-buttons">
-                <button type="button" class="game-button" id="send-button"
-                    onmouseup="sendCards()">
-                    Play Cards
-                </button>
-                <button type="button" class="game-button" id="pass-button"
-                    onmouseup="passTurn()">
-                    Pass Turn
-                </button>
-            </div>
-            <div class="hand" id="hand">
+            <div class="control" id="control">
+                <div class="game-buttons" id="game-buttons">
+                    <button type="button" class="game-button" id="send-button"
+                        onmouseup="sendCards()">
+                        Play Cards
+                    </button>
+                    <button type="button" class="game-button" id="pass-button"
+                        onmouseup="passTurn()">
+                        Pass Turn
+                    </button>
+                </div>
+                <div class="hand" id="hand">
+                </div>
             </div>
         </div>
     </body>

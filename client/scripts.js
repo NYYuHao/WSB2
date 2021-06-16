@@ -36,6 +36,9 @@ ws.onmessage = function(msg) {
         case 'numplayers':
             num_players.innerHTML = `${data.num} player(s)`;
             break;
+        case 'startgame':
+            displayGameInfo(data.numPlayers);
+            break;
         case 'gethand':
             renderHand(data.hand);
             undisplaySettings();
@@ -172,10 +175,16 @@ function cardToObject(card) {
 
 // HTML Updates
 
+// Display game info at the start of a game
+// Render player info depending on number of players
+function displayGameInfo(numPlayers) {
+    plays_div.style.display = 'flex';
+    // TODO: Render player info
+}
+
 // Remove the game settings div and display plays
 function undisplaySettings() {
     game_settings_div.style.display = 'none';
-    plays_div.style.display = 'flex';
 }
 
 // Render the hand returned by the server
@@ -227,7 +236,7 @@ function clearSets() {
 // Adds a div turn to plays, removing old ones if necessary
 function addPlay(turn) {
     plays_div.appendChild(turn);
-    if (numPlays >= 4)
+    if (numPlays >= 5)
         plays_div.removeChild(plays_div.childNodes[0]);
     else
         numPlays++;
