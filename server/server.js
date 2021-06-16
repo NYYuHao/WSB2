@@ -126,10 +126,11 @@ function startGame(ws, gameid) {
     game.shuffle();
     game.deal();
     for (let i = 0; i < players.length; i++) {
-        // TODO: Also send 'startgame' with relevant player info
         pidTable[players[i]].send(JSON.stringify(
             {
-                type: 'gethand', hand: game.getHand(players[i])
+                type: 'startgame',
+                hand: game.getHand(players[i]),
+                opponents: game.getOpponents(players[i])
             }
         ));
     }
@@ -148,12 +149,14 @@ function playTurn(ws, gameid, cards) {
     let turnResult = game.playTurn(ws.pid, cards);
     // On successful play, let player know and start next turn
     if (turnResult) {
-        ws.send(JSON.stringify({type: 'playsuccess', turn: turnResult.turn}));
+        ws.send(JSON.stringify({type: 'playsuccess'}));
         pidTable[game.getPlayers()[turnResult.currentPlayer]].send(
             JSON.stringify({type: 'turnstart'}));
         game.getPlayers().forEach((pid) => pidTable[pid].send(
             JSON.stringify({
-                type: 'turncards', turn: turnResult.turn, cards: cards
+                type: 'turncards',
+                playerNum: turnResult.playerNum, // Add one for rendering
+                cards: cards
             })));
     }
     else {
@@ -169,13 +172,12 @@ function passTurn(ws, gameid) {
 
     let turnResult = game.passTurn(ws.pid)
     if (turnResult) {
-        ws.send(JSON.stringify({type: 'passsuccess', turn: turnResult.turn}));
+        ws.send(JSON.stringify({type: 'passsuccess'}));
         pidTable[game.getPlayers()[turnResult.currentPlayer]].send(
             JSON.stringify({type: 'turnstart'}));
-        // TODO: Update every player to display this pass
         game.getPlayers().forEach((pid) => pidTable[pid].send(
             JSON.stringify({
-                type: 'turnpass', turn: turnResult.turn
+                type: 'turnpass', playerNum: turnResult.playerNum
             })));
     }
     else {

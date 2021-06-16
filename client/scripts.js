@@ -9,6 +9,11 @@ const num_players = document.getElementById("num-players");
 const plays_div = document.getElementById("plays");
 const hand_div = document.getElementById("hand");
 const game_buttons_div = document.getElementById("game-buttons");
+const opponent_divs = [
+    document.getElementById("right-player"),
+    document.getElementById("top-player"),
+    document.getElementById("left-player")
+]
 var gameid = null;
 var numPlays = 0;
 
@@ -37,9 +42,7 @@ ws.onmessage = function(msg) {
             num_players.innerHTML = `${data.num} player(s)`;
             break;
         case 'startgame':
-            displayGameInfo(data.numPlayers);
-            break;
-        case 'gethand':
+            displayGameInfo(data.opponents);
             renderHand(data.hand);
             undisplaySettings();
             break;
@@ -54,10 +57,11 @@ ws.onmessage = function(msg) {
             undisplayTurn();
             break;
         case 'turncards':
-            displayTurnCards(data.cards, data.turn);
+            // TODO: Remove the number of cards from opponent hand
+            displayTurnCards(data.cards, data.playerNum);
             break;
         case 'turnpass':
-            displayTurnPass(data.turn);
+            displayTurnPass(data.playerNum);
             break;
     }
 }
@@ -176,10 +180,18 @@ function cardToObject(card) {
 // HTML Updates
 
 // Display game info at the start of a game
-// Render player info depending on number of players
-function displayGameInfo(numPlayers) {
+// Render player info depending on opponents
+function displayGameInfo(opponents) {
     plays_div.style.display = 'flex';
-    // TODO: Render player info
+    for (i = 0; i < opponents.length; i++) {
+        // If there's only one opponent, render only top opponent
+        let opponent_div = opponent_divs[i];
+        if (opponents.length == 1) {
+            opponent_div = opponent_divs[1];
+        }
+        opponent_div.innerHTML = `Player ${opponents[i].opponentNum}: ${opponents[i].opponentHandSize} cards`;
+        opponent_div.style.display = "block";
+    }
 }
 
 // Remove the game settings div and display plays
@@ -243,9 +255,9 @@ function addPlay(turn) {
 }
 
 // Displays the cards played in the previous turn
-function displayTurnCards(cards, turnNum) {
+function displayTurnCards(cards, playerNum) {
     let turn = document.createElement('div');
-    turn.innerHTML = `Turn ${turnNum}: `;
+    turn.innerHTML = `Player ${playerNum}: `;
     turn.className = 'turn';
     // Render every played card
     for (let i = 0; i < cards.length; i++) {
@@ -260,9 +272,9 @@ function displayTurnCards(cards, turnNum) {
 }
 
 // Display a turn pass
-function displayTurnPass(turnNum) {
+function displayTurnPass(playerNum) {
     let turn = document.createElement('div');
-    turn.innerHTML = `Turn ${turnNum}: Pass`;
+    turn.innerHTML = `Player ${playerNum}: Pass`;
     turn.className = 'turn';
     addPlay(turn);
 }

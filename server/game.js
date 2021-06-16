@@ -50,6 +50,21 @@ class Game {
         return Object.keys(this.playerOrder);
     }
 
+    // Return an array of player pid's opponent nums and their hand sizes
+    // in order
+    getOpponents(pid) {
+        let opponents = [];
+        for (let i = 1; i < this.numPlayers; i++) {
+            let opponentNum = (this.playerOrder[pid]+i)%this.numPlayers;
+            let opponentHandSize = this.playerHands[opponentNum].size;
+            opponents.push({
+                opponentNum: opponentNum+1,
+                opponentHandSize: opponentHandSize
+            });
+        }
+        return opponents;
+    }
+
     // Start the game (i.e. determine player order, return start pid)
     startGame() {
         // TODO: Assert that game has players?
@@ -90,7 +105,7 @@ class Game {
         this.consPasses = 0;
         // TODO: Sometimes this doesn't properly handle turns?
         // Occured on Player 1 playing 16
-        return {currentPlayer: this.currentPlayer, turn: this.turn};
+        return {currentPlayer: this.currentPlayer, playerNum: playerNum+1};
     }
 
     // Pass pid's turn
@@ -108,7 +123,7 @@ class Game {
         this.consPasses++;
         if (this.consPasses == this.numPlayers-1)
             this.lastCards = [];
-        return {currentPlayer: this.currentPlayer, turn: this.turn};
+        return {currentPlayer: this.currentPlayer, playerNum: playerNum+1};
     }
 
 

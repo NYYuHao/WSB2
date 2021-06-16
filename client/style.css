@@ -42,13 +42,14 @@
 /* Container for play and pass buttons */
 .game-buttons {
     display: none;
-    justify-content: space-around;
+    justify-content: center;
 }
 
 /* Play and pass buttons */
 .game-button {
     display: inline-block;
-    width: 30%;
+    margin: 5px;
+    width: 20%;
     height: 100px;
 }
 
@@ -98,7 +99,7 @@
     justify-content: flex-start;
     align-content: flex-start;
     height: 340px;
-    width: 330px;
+    width: 350px;
     background: #EDEDED;
     padding: 10px;
     border: 2px solid #E3E3E3;
