@@ -13,13 +13,14 @@ const opponent_divs = [
     document.getElementById("right-player"),
     document.getElementById("top-player"),
     document.getElementById("left-player")
-]
+];
 var gameid = null;
 var numPlays = 0;
 
-let handCards = new Set()           // Set representing client hand
-let selectedCards = new Set()       // Set representing selected cards
-let selectedCardDivs = new Set()    // Set representing selected divs
+var handCards = new Set();          // Set representing client hand
+var selectedCards = new Set();      // Set representing selected cards
+var selectedCardDivs = new Set();   // Set representing selected divs
+var opponent_info = {};             // Object of opponentNum: {divs} pairs
 
 ws.onmessage = function(msg) {
     var data = JSON.parse(msg.data);
@@ -42,7 +43,8 @@ ws.onmessage = function(msg) {
             num_players.innerHTML = `${data.num} player(s)`;
             break;
         case 'startgame':
-            displayGameInfo(data.opponents);
+            initializePlayerInfo(data.opponents);
+            displayGameInfo();
             renderHand(data.hand);
             undisplaySettings();
             break;
@@ -179,19 +181,33 @@ function cardToObject(card) {
 
 // HTML Updates
 
-// Display game info at the start of a game
-// Render player info depending on opponents
-function displayGameInfo(opponents) {
-    plays_div.style.display = 'flex';
+// Initialize player map with relevant divs
+// based on opponents
+function initializePlayerInfo(opponents) {
     for (i = 0; i < opponents.length; i++) {
         // If there's only one opponent, render only top opponent
         let opponent_div = opponent_divs[i];
         if (opponents.length == 1) {
             opponent_div = opponent_divs[1];
         }
-        opponent_div.innerHTML = `Player ${opponents[i].opponentNum}: ${opponents[i].opponentHandSize} cards`;
-        opponent_div.style.display = "block";
+        opponent_div.innerHTML = `Player ${opponents[i].opponentNum}`;
+        let opponent_card = document.createElement("div");
+        opponent_card.className = 'info-card played-card';
+        opponent_card.innerHTML = opponents[i].opponentHandSize;
+        opponent_div.appendChild(opponent_card);
+        // Store divs for updating later
+        opponent_info[opponents[i].opponentNum] = {
+            infoContainer: opponent_div,
+            infoCard: opponent_card
+        }
+        opponent_div.style.visibility = "visible";
     }
+}
+
+// Display game info at the start of a game
+// Render player info depending on opponents
+function displayGameInfo(opponents) {
+    plays_div.style.display = 'flex';
 }
 
 // Remove the game settings div and display plays

@@ -129,11 +129,18 @@
 
 /* Container for other player information */
 .player-info {
-    display: none;
+    visibility: hidden;
     margin: 5px;
+    padding: 5px;
     border: 2px solid #E3E3E3;
     border-radius: 10px;
-    width: 140px;
+    width: 100px;
     height: 100px;
     background: #EDEDED;
+    text-align: center;
+}
+
+/* Cards in player-info storing size of hands */
+.info-card {
+    margin: 10px auto;
 }
