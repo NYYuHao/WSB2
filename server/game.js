@@ -105,7 +105,11 @@ class Game {
         this.consPasses = 0;
         // TODO: Sometimes this doesn't properly handle turns?
         // Occured on Player 1 playing 16
-        return {currentPlayer: this.currentPlayer, playerNum: playerNum+1};
+        return {
+            currentPlayer: this.currentPlayer,
+            playerNum: playerNum+1,
+            handSize: this.playerHands[playerNum].size
+        };
     }
 
     // Pass pid's turn

@@ -59,7 +59,7 @@ ws.onmessage = function(msg) {
             undisplayTurn();
             break;
         case 'turncards':
-            // TODO: Remove the number of cards from opponent hand
+            updateOpponentInfo(data.handSize, data.playerNum);
             displayTurnCards(data.cards, data.playerNum);
             break;
         case 'turnpass':
@@ -268,6 +268,12 @@ function addPlay(turn) {
         plays_div.removeChild(plays_div.childNodes[0]);
     else
         numPlays++;
+}
+
+// Whenever cards are played, update the opponent's hand size
+function updateOpponentInfo(handSize, playerNum) {
+    // TODO: Need to make sure this doesn't attempt to update self
+    opponent_info[playerNum].infoCard.innerHTML = `${handSize}`;
 }
 
 // Displays the cards played in the previous turn
