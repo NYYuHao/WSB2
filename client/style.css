@@ -138,6 +138,7 @@
     height: 100px;
     background: #EDEDED;
     text-align: center;
+    transition: background 0.2s;
 }
 
 /* Cards in player-info storing size of hands */

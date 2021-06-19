@@ -59,11 +59,15 @@ ws.onmessage = function(msg) {
             undisplayTurn();
             break;
         case 'turncards':
-            updateOpponentInfo(data.handSize, data.playerNum);
-            displayTurnCards(data.cards, data.playerNum);
+            updateOpponentInfo(data.handSize, data.lastPlayer);
+            displayTurnCards(data.cards, data.lastPlayer);
             break;
         case 'turnpass':
-            displayTurnPass(data.playerNum);
+            updateOpponentInfo(data.handSize, data.lastPlayer);
+            displayTurnPass(data.lastPlayer);
+            break;
+        case 'updateopponent':
+            updateOpponentColor(data.currentPlayer);
             break;
     }
 }
@@ -271,9 +275,20 @@ function addPlay(turn) {
 }
 
 // Whenever cards are played, update the opponent's hand size
-function updateOpponentInfo(handSize, playerNum) {
-    // TODO: Need to make sure this doesn't attempt to update self
-    opponent_info[playerNum].infoCard.innerHTML = `${handSize}`;
+// and return background to normal
+function updateOpponentInfo(handSize, lastPlayer) {
+    // Skip if attempting to update self
+    if (opponent_info.hasOwnProperty(lastPlayer)) {
+        if (handSize) opponent_info[lastPlayer].infoCard.innerHTML = `${handSize}`;
+        opponent_info[lastPlayer].infoContainer.style.background = '#EDEDED';
+    }
+}
+
+// Update the currentPlayer to show whose turn it is
+function updateOpponentColor(currentPlayer) {
+    if (opponent_info.hasOwnProperty(currentPlayer)) {
+        opponent_info[currentPlayer].infoContainer.style.background = '#B5B5B5';
+    }
 }
 
 // Displays the cards played in the previous turn

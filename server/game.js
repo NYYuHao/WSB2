@@ -70,14 +70,17 @@ class Game {
         // TODO: Assert that game has players?
         // Find which player has closest to 3ofD
         let mins = [];
-        for (let i = 0; i < this.numPlayers; i++ ) {
+        for (let i = 0; i < this.numPlayers; i++) {
             let fh = Array.from(this.playerHands[i])
                 .map((card) => (card < 8) ? card + 52 : card);
             mins.push(Math.min(...fh));
         }
         this.currentPlayer = mins.indexOf(Math.min(...mins));
-        return Object.keys(this.playerOrder)
-            .find((pid) => this.playerOrder[pid] == this.currentPlayer);
+        return {
+            firstPid: Object.keys(this.playerOrder).find(
+                (pid) => this.playerOrder[pid] == this.currentPlayer),
+            firstPlayer: this.currentPlayer
+        }
     }
 
     // Play a turn with the given cards
@@ -107,7 +110,7 @@ class Game {
         // Occured on Player 1 playing 16
         return {
             currentPlayer: this.currentPlayer,
-            playerNum: playerNum+1,
+            lastPlayer: playerNum,
             handSize: this.playerHands[playerNum].size
         };
     }
@@ -127,7 +130,10 @@ class Game {
         this.consPasses++;
         if (this.consPasses == this.numPlayers-1)
             this.lastCards = [];
-        return {currentPlayer: this.currentPlayer, playerNum: playerNum+1};
+        return {
+            currentPlayer: this.currentPlayer,
+            lastPlayer: playerNum
+        };
     }
 
 

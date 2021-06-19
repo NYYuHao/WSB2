@@ -136,8 +136,15 @@ function startGame(ws, gameid) {
     }
 
     // Start game, send 'turnstart' to the first player
-    let firstPid = game.startGame();
+    // and update opponents to show current player
+    let startResult = game.startGame();
+    let firstPid = startResult.firstPid;
     pidTable[firstPid].send(JSON.stringify({type: 'turnstart'}));
+    game.getPlayers().forEach((pid) => pidTable[pid].send(
+        JSON.stringify({
+            type: 'updateopponent',
+            currentPlayer: startResult.firstPlayer+1
+        })));
 }
 
 // Attempt to play a turn based on the cards received by ws
@@ -156,9 +163,15 @@ function playTurn(ws, gameid, cards) {
         game.getPlayers().forEach((pid) => pidTable[pid].send(
             JSON.stringify({
                 type: 'turncards',
-                playerNum: turnResult.playerNum, // Add one for rendering
+                // Add 1 for frontend rendering
+                lastPlayer: turnResult.lastPlayer+1,
                 handSize: turnResult.handSize,
                 cards: cards
+            })));
+        game.getPlayers().forEach((pid) => pidTable[pid].send(
+            JSON.stringify({
+                type: 'updateopponent',
+                currentPlayer: turnResult.currentPlayer+1
             })));
     }
     else {
@@ -179,7 +192,12 @@ function passTurn(ws, gameid) {
             JSON.stringify({type: 'turnstart'}));
         game.getPlayers().forEach((pid) => pidTable[pid].send(
             JSON.stringify({
-                type: 'turnpass', playerNum: turnResult.playerNum
+                type: 'turnpass', lastPlayer: turnResult.lastPlayer+1
+            })));
+        game.getPlayers().forEach((pid) => pidTable[pid].send(
+            JSON.stringify({
+                type: 'updateopponent',
+                currentPlayer: turnResult.currentPlayer+1
             })));
     }
     else {
