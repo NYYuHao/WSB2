@@ -189,11 +189,7 @@ function cardToObject(card) {
 // based on opponents
 function initializePlayerInfo(opponents) {
     for (i = 0; i < opponents.length; i++) {
-        // If there's only one opponent, render only top opponent
         let opponent_div = opponent_divs[i];
-        if (opponents.length == 1) {
-            opponent_div = opponent_divs[1];
-        }
         opponent_div.innerHTML = `Player ${opponents[i].opponentNum}`;
         let opponent_card = document.createElement("div");
         opponent_card.className = 'info-card played-card';
@@ -204,7 +200,7 @@ function initializePlayerInfo(opponents) {
             infoContainer: opponent_div,
             infoCard: opponent_card
         }
-        opponent_div.style.visibility = "visible";
+        opponent_div.style.display = "block";
     }
 }
 

@@ -8,7 +8,7 @@ class Game {
         this.turn = 0;
         this.consPasses = 0;
         this.playerHands = [new Set(), new Set(), new Set(), new Set()];
-        this.playerOrder = {}; // {pid: playernum} pairs
+        this.playerOrder = new Map(); // {pid: playernum} pairs
         this.lastCards = []; // Most recent play
     }
 
@@ -31,23 +31,22 @@ class Game {
         }
     }
 
-
     // Server logic
 
     // Return an array copy of the player hand belonging to player id pid
     getHand(pid) {
-        return Array.from(this.playerHands[this.playerOrder[pid]]);
+        return Array.from(this.playerHands[this.playerOrder.get(pid)]);
     }
 
     // Add a player pid to the game
     addPlayer(pid) {
         if (this.numPlayers > 3) throw "Invalid attempt to add player";
-        this.playerOrder[pid] = this.numPlayers++;
+        this.playerOrder.set(pid, this.numPlayers++);
     }
 
     // Return an array copy of the pids in the game
     getPlayers() {
-        return Object.keys(this.playerOrder);
+        return Array.from(this.playerOrder.keys());
     }
 
     // Return an array of player pid's opponent nums and their hand sizes
@@ -55,7 +54,7 @@ class Game {
     getOpponents(pid) {
         let opponents = [];
         for (let i = 1; i < this.numPlayers; i++) {
-            let opponentNum = (this.playerOrder[pid]+i)%this.numPlayers;
+            let opponentNum = (this.playerOrder.get(pid)+i)%this.numPlayers;
             let opponentHandSize = this.playerHands[opponentNum].size;
             opponents.push({
                 opponentNum: opponentNum+1,
@@ -77,15 +76,15 @@ class Game {
         }
         this.currentPlayer = mins.indexOf(Math.min(...mins));
         return {
-            firstPid: Object.keys(this.playerOrder).find(
-                (pid) => this.playerOrder[pid] == this.currentPlayer),
+            firstPid: Array.from(this.playerOrder.keys()).find(
+                (pid) => this.playerOrder.get(pid) == this.currentPlayer),
             firstPlayer: this.currentPlayer
         }
     }
 
     // Play a turn with the given cards
     playTurn(pid, cards) {
-        let playerNum = this.playerOrder[pid];
+        let playerNum = this.playerOrder.get(pid);
         // Make sure it's the player's turn
         if (playerNum != this.currentPlayer)
             return false;
@@ -117,7 +116,7 @@ class Game {
 
     // Pass pid's turn
     passTurn(pid, cards) {
-        let playerNum = this.playerOrder[pid];
+        let playerNum = this.playerOrder.get(pid);
         // Make sure it's the player's turn
         if (playerNum != this.currentPlayer)
             return false;

@@ -50,7 +50,7 @@
     display: inline-block;
     margin: 5px;
     width: 20%;
-    height: 100px;
+    height: 50px;
 }
 
 /* Container for cards in hand */
@@ -62,12 +62,12 @@
 
 /* Card (in hand only) */
 .card {
-    font-size: 40px;
+    font-size: 3vh;
     border: 1px solid black;
     border-radius: 5px;
-    width: 100px;
-    height: 140px;
-    line-height: 140px;
+    width: 7.5vh;
+    height: 10.5vh;
+    line-height: 10.5vh;
     text-align: center;
     margin: 10px;
     box-shadow: 2px 2px 3px gray;
@@ -129,7 +129,7 @@
 
 /* Container for other player information */
 .player-info {
-    visibility: hidden;
+    display: none;
     margin: 5px;
     padding: 5px;
     border: 2px solid #E3E3E3;

@@ -157,7 +157,6 @@ function playTurn(ws, gameid, cards) {
     // On successful play, let player know and start next turn
     if (turnResult) {
         ws.send(JSON.stringify({type: 'playsuccess'}));
-        // TODO: This is sometimes NOT sending to the right player
         pidTable[game.getPlayers()[turnResult.currentPlayer]].send(
             JSON.stringify({type: 'turnstart'}));
         game.getPlayers().forEach((pid) => pidTable[pid].send(
