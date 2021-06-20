@@ -7,6 +7,7 @@ class Game {
         this.currentPlayer = 0;
         this.turn = 0;
         this.consPasses = 0;
+        this.gameOver = false;
         this.playerHands = [new Set(), new Set(), new Set(), new Set()];
         this.playerOrder = new Map(); // {pid: playernum} pairs
         this.lastCards = []; // Most recent play
@@ -85,6 +86,8 @@ class Game {
     // Play a turn with the given cards
     playTurn(pid, cards) {
         let playerNum = this.playerOrder.get(pid);
+        if (this.gameOver)
+            return false;
         // Make sure it's the player's turn
         if (playerNum != this.currentPlayer)
             return false;
@@ -101,22 +104,26 @@ class Game {
             return false;
         // Remove cards from hand
         cards.forEach((card) => this.playerHands[playerNum].delete(card));
+        // Check for game end
+        if (this.playerHands[playerNum].size == 0)
+            this.gameOver = true;
         this.lastCards = cards;
         this.currentPlayer = (this.currentPlayer+1)%this.numPlayers;
         this.turn++;
         this.consPasses = 0;
-        // TODO: Sometimes this doesn't properly handle turns?
-        // Occured on Player 1 playing 16
         return {
             currentPlayer: this.currentPlayer,
             lastPlayer: playerNum,
-            handSize: this.playerHands[playerNum].size
+            handSize: this.playerHands[playerNum].size,
+            gameOver: this.gameOver
         };
     }
 
     // Pass pid's turn
     passTurn(pid, cards) {
         let playerNum = this.playerOrder.get(pid);
+        if (this.gameOver)
+            return false;
         // Make sure it's the player's turn
         if (playerNum != this.currentPlayer)
             return false;

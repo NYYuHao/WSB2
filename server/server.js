@@ -157,9 +157,14 @@ function playTurn(ws, gameid, cards) {
     // On successful play, let player know and start next turn
     if (turnResult) {
         ws.send(JSON.stringify({type: 'playsuccess'}));
-        pidTable[game.getPlayers()[turnResult.currentPlayer]].send(
+
+        // Let the current player know it's their turn
+        let playerPids = game.getPlayers();
+        pidTable[playerPids[turnResult.currentPlayer]].send(
             JSON.stringify({type: 'turnstart'}));
-        game.getPlayers().forEach((pid) => pidTable[pid].send(
+
+        // Update every player with the play
+        playerPids.forEach((pid) => pidTable[pid].send(
             JSON.stringify({
                 type: 'turncards',
                 // Add 1 for frontend rendering
@@ -167,11 +172,23 @@ function playTurn(ws, gameid, cards) {
                 handSize: turnResult.handSize,
                 cards: cards
             })));
-        game.getPlayers().forEach((pid) => pidTable[pid].send(
+
+        // Update every player with the next opponent
+        playerPids.forEach((pid) => pidTable[pid].send(
             JSON.stringify({
                 type: 'updateopponent',
                 currentPlayer: turnResult.currentPlayer+1
             })));
+
+        // If the game is over, let the players know who won
+        if (turnResult.gameOver) {
+            playerPids.forEach((pid) => pidTable[pid].send(
+                JSON.stringify({
+                    type: 'gameover',
+                    winner: turnResult.lastPlayer+1
+                }
+            )));
+        }
     }
     else {
         console.error('Invalid attempt to play cards');
@@ -187,13 +204,20 @@ function passTurn(ws, gameid) {
     let turnResult = game.passTurn(ws.pid)
     if (turnResult) {
         ws.send(JSON.stringify({type: 'passsuccess'}));
-        pidTable[game.getPlayers()[turnResult.currentPlayer]].send(
+
+        // Let the current player know it's their turn
+        let playerPids = game.getPlayers();
+        pidTable[playerPids[turnResult.currentPlayer]].send(
             JSON.stringify({type: 'turnstart'}));
-        game.getPlayers().forEach((pid) => pidTable[pid].send(
+
+        // Update every player with the pass
+        playerPids.forEach((pid) => pidTable[pid].send(
             JSON.stringify({
                 type: 'turnpass', lastPlayer: turnResult.lastPlayer+1
             })));
-        game.getPlayers().forEach((pid) => pidTable[pid].send(
+
+        // Update every player with the next opponent
+        playerPids.forEach((pid) => pidTable[pid].send(
             JSON.stringify({
                 type: 'updateopponent',
                 currentPlayer: turnResult.currentPlayer+1

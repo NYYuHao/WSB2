@@ -69,6 +69,9 @@ ws.onmessage = function(msg) {
         case 'updateopponent':
             updateOpponentColor(data.currentPlayer);
             break;
+        case 'gameover':
+            console.log(`Game over: Player ${data.winner} wins!`);
+            break;
     }
 }
 
