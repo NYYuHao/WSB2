@@ -67,7 +67,9 @@ class Game {
 
     // Start the game (i.e. determine player order, return start pid)
     startGame() {
-        // TODO: Assert that game has players?
+        if (this.numPlayers < 1 || this.numPlayers > 4)
+            throw "Invalid number of players";
+
         // Find which player has closest to 3ofD
         let mins = [];
         for (let i = 0; i < this.numPlayers; i++) {

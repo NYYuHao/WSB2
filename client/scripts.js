@@ -194,6 +194,7 @@ function initializePlayerInfo(opponents) {
     for (i = 0; i < opponents.length; i++) {
         let opponent_div = opponent_divs[i];
         opponent_div.innerHTML = `Player ${opponents[i].opponentNum}`;
+
         let opponent_card = document.createElement("div");
         opponent_card.className = 'info-card played-card';
         opponent_card.innerHTML = opponents[i].opponentHandSize;
