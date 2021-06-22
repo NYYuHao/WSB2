@@ -35,16 +35,16 @@ wss.on('connection', (ws, req) => {
                 ws.send(JSON.stringify(joinGame(ws, msg.gameid)));
                 break;
             case "startgame":
-                ws.send(JSON.stringify(startGame(ws, msg.gameid)));
+                startGame(ws, msg.gameid);
                 break;
             case "playturn":
-                ws.send(JSON.stringify(playTurn(ws, msg.gameid, msg.cards)));
+                playTurn(ws, msg.gameid, msg.cards);
                 break;
             case "passturn":
-                ws.send(JSON.stringify(passTurn(ws, msg.gameid)));
+                passTurn(ws, msg.gameid);
                 break;
             case "restartgame":
-                ws.send(JSON.stringify(restartGame(ws, msg.gameid)));
+                restartGame(ws, msg.gameid);
                 break;
             default:
                 console.error("ERROR: Unrecognized message type");

@@ -235,7 +235,9 @@ function undisplaySettings() {
 // Use when game first starts
 function renderHand(hand) {
     // Remove any cards already present
-    while (hand_div.firstChild) hand_div.removeChild(hand_div.firstChild);
+    while (hand_div.firstChild) {hand_div.removeChild(hand_div.lastChild);}
+    handCards.clear();
+    selectedCards.clear();
 
     // Render the cards
     hand.sort((a, b) => a-b);

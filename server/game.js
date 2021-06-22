@@ -21,8 +21,9 @@ class Game {
         }       
     }
 
-    // Distribute the deck into four hands, simulating an actual deal
+    // Distribute the deck into four new hands, simulating an actual deal
     deal() {
+        this.playerHands.forEach((hand) => hand.clear());
         let cut = this.deck[Math.floor(Math.random() * 52)];
 
         for (let i = 0; i < 13; i++) {
