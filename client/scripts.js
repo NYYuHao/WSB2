@@ -14,6 +14,8 @@ const opponent_divs = [
     document.getElementById("top-player"),
     document.getElementById("left-player")
 ];
+const dim_overlay = document.getElementById("dim-overlay");
+const overlay_header = document.getElementById("overlay-header");
 var gameid = null;
 var numPlays = 0;
 
@@ -70,7 +72,7 @@ ws.onmessage = function(msg) {
             updateOpponentColor(data.currentPlayer);
             break;
         case 'gameover':
-            console.log(`Game over: Player ${data.winner} wins!`);
+            displayGameOver(data.winner);
             break;
     }
 }
@@ -137,6 +139,15 @@ function sendCards() {
 function passTurn() {
     var data = {
         type: "passturn",
+        gameid: gameid
+    };
+    ws.send(JSON.stringify(data));
+}
+
+// Attempt to restart the game
+function restartGame() {
+    var data = {
+        type: "restartgame",
         gameid: gameid
     };
     ws.send(JSON.stringify(data));
@@ -214,15 +225,18 @@ function displayGameInfo(opponents) {
     plays_div.style.display = 'flex';
 }
 
-// Remove the game settings div and display plays
+// Remove the game settings div + overlay and display plays
 function undisplaySettings() {
+    dim_overlay.style.display = 'none';
     game_settings_div.style.display = 'none';
 }
 
 // Render the hand returned by the server
 // Use when game first starts
 function renderHand(hand) {
-    hand.innerHTML = "";
+    // Remove any cards already present
+    while (hand_div.firstChild) hand_div.removeChild(hand_div.firstChild);
+
     // Render the cards
     hand.sort((a, b) => a-b);
     for (let i = 0; i < hand.length; i++) {
@@ -314,4 +328,10 @@ function displayTurnPass(playerNum) {
     turn.innerHTML = `Player ${playerNum}: Pass`;
     turn.className = 'turn';
     addPlay(turn);
+}
+
+// Display the dim overlay when the game is over with the winner
+function displayGameOver(winner) {
+    dim_overlay.style.display = 'block';
+    overlay_header.innerHTML = `Player ${winner} won!`;
 }

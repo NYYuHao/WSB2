@@ -148,6 +148,7 @@
 
 /* Overlay for game over notification */
 .dim-overlay {
+    display: none;
     position: fixed;
     top: 0;
     left: 0;

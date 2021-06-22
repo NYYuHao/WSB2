@@ -238,15 +238,20 @@ class Game {
     // h1 and h2 are arrays of unique cards
     // Returns true if h2 is a valid, stronger hand than h1
     static compareHands(h1, h2) {
-        if (h1.length == 0) return true;
-        if (h1.length != h2.length) return false;
-
         // "Fix" the cards so that As and 2s are highest value
         let fh1 = h1.map((card) => (card < 8) ? card + 52 : card);
         let fh2 = h2.map((card) => (card < 8) ? card + 52 : card);
         // Sort for convenience
         fh1.sort((a, b) => a-b);
         fh2.sort((a, b) => a-b);
+
+        // If card has been played yet and hand is valid, return true
+        if (h1.length == 0 && (
+            h2.length == 1 || Game.isPair(fh2) || Game.isThreeOfKind(fh2) ||
+            Game.isStraight(fh2) || Game.isFlush(fh2) || Game.isFullHouse(fh2) ||
+            Game.isFourOfKind(fh2)))
+            return true;
+        if (h1.length != h2.length) return false;
 
         // Comparing singles, 2s > As > Ks > Qs ...
         if (fh1.length == 1) {
