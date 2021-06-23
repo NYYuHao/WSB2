@@ -16,7 +16,6 @@ const opponent_divs = [
 ];
 const dim_overlay = document.getElementById("dim-overlay");
 const overlay_header = document.getElementById("overlay-header");
-var gameid = null;
 var numPlays = 0;
 
 var handCards = new Set();          // Set representing client hand
@@ -35,7 +34,6 @@ ws.onmessage = function(msg) {
         case 'joingame':
             if (data.success) {
                 message_div.innerHTML = `Game code: ${data.id}`;
-                gameid = data.id;
                 displayStart();
             }
             else
@@ -77,12 +75,6 @@ ws.onmessage = function(msg) {
     }
 }
 
-// Intentionally disconnect from the server via button press
-function disconnect() {
-    ws.close();
-    message_div.innerHTML = "Disconnected";
-}
-
 // Attempt to create a game via request to the server (fails if already in one)
 function createGame() {
     var data = {
@@ -103,8 +95,7 @@ function joinGame() {
 // Attempt to start a game for the given room
 function startGame() {
     var data = {
-        type: "startgame",
-        gameid: gameid
+        type: "startgame"
     };
     ws.send(JSON.stringify(data));
 }
@@ -129,7 +120,6 @@ function selectCard(cardDiv, cardVal) {
 function sendCards() {
     var data = {
         type: "playturn",
-        gameid: gameid,
         cards: Array.from(selectedCards)
     };
     ws.send(JSON.stringify(data));
@@ -139,7 +129,6 @@ function sendCards() {
 function passTurn() {
     var data = {
         type: "passturn",
-        gameid: gameid
     };
     ws.send(JSON.stringify(data));
 }
@@ -148,7 +137,6 @@ function passTurn() {
 function restartGame() {
     var data = {
         type: "restartgame",
-        gameid: gameid
     };
     ws.send(JSON.stringify(data));
 }

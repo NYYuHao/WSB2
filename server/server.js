@@ -35,16 +35,16 @@ wss.on('connection', (ws, req) => {
                 ws.send(JSON.stringify(joinGame(ws, msg.gameid)));
                 break;
             case "startgame":
-                startGame(ws, msg.gameid);
+                startGame(ws);
                 break;
             case "playturn":
-                playTurn(ws, msg.gameid, msg.cards);
+                playTurn(ws, msg.cards);
                 break;
             case "passturn":
-                passTurn(ws, msg.gameid);
+                passTurn(ws);
                 break;
             case "restartgame":
-                restartGame(ws, msg.gameid);
+                restartGame(ws);
                 break;
             default:
                 console.error("ERROR: Unrecognized message type");
@@ -77,6 +77,7 @@ function createGame(ws) {
     gamesTable[gameid] = new Game();
     gamesTable[gameid].addPlayer(ws.pid);
     pidTable[ws.pid] = ws;
+    ws.gameid = gameid;
     
     // Update the members of the game with the player count
     updateNumPlayers(gameid)
@@ -101,6 +102,7 @@ function joinGame(ws, gameid) {
         return {type: 'joingame', id: null, success: false};
     }
     pidTable[ws.pid] = ws;
+    ws.gameid = gameid;
 
     // Update the members of the game with the player count
     updateNumPlayers(gameid)
@@ -116,15 +118,15 @@ function updateNumPlayers(gameid) {
 }
 
 // Start the game for all players in a lobby
-function startGame(ws, gameid) {
-    let game = gamesTable[gameid];
-    let players = gamesTable[gameid].getPlayers();
+function startGame(ws) {
+    let game = gamesTable[ws.gameid];
+    let players = gamesTable[ws.gameid].getPlayers();
 
     // Verify that ws is actually a part of game gameid
     // TODO: Maybe make this return something instead of throw?
     if (!players.includes(ws.pid)) throw "Invalid attempt to start game";
 
-    console.log(`Starting game\tGID: ${gameid}`);
+    console.log(`Starting game\tGID: ${ws.gameid}`);
 
     game.shuffle();
     game.deal();
@@ -151,10 +153,10 @@ function startGame(ws, gameid) {
 }
 
 // Attempt to play a turn based on the cards received by ws
-function playTurn(ws, gameid, cards) {
-    let game = gamesTable[gameid];
+function playTurn(ws, cards) {
+    let game = gamesTable[ws.gameid];
 
-    console.log(`Playing cards\tGID: ${gameid}\tCards: ${cards}`);
+    console.log(`Playing cards\tGID: ${ws.gameid}\tCards: ${cards}`);
 
     let turnResult = game.playTurn(ws.pid, cards);
     // On successful play, let player know and start next turn
@@ -199,10 +201,10 @@ function playTurn(ws, gameid, cards) {
 }
 
 // Attempt to pass a turn for ws
-function passTurn(ws, gameid) {
-    let game = gamesTable[gameid];
+function passTurn(ws) {
+    let game = gamesTable[ws.gameid];
 
-    console.log(`Passing turn\tGID: ${gameid}`);
+    console.log(`Passing turn\tGID: ${ws.gameid}`);
 
     let turnResult = game.passTurn(ws.pid)
     if (turnResult) {
@@ -231,10 +233,10 @@ function passTurn(ws, gameid) {
     }
 }
 
-// Attempt to restart the game for gameid
-function restartGame(ws, gameid) {
+// Attempt to restart the game ws is in
+function restartGame(ws) {
     // TODO: Maybe make this more robust
     // i.e. if only two players reuse the remaining two hands
     // and continue with whoever won the last game
-    startGame(ws, gameid);
+    startGame(ws);
 }
