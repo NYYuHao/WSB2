@@ -1,9 +1,7 @@
 const ws = new WebSocket("ws://localhost:8000");
 
 const message_div = document.getElementById("message-div");
-const join_form = document.getElementById("join-form");
 const game_settings_div = document.getElementById("game-settings");
-const start_div = document.getElementById("start-div");
 const start_button = document.getElementById("start-button");
 const num_players = document.getElementById("num-players");
 const plays_div = document.getElementById("plays");
