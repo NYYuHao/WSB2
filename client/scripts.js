@@ -43,6 +43,8 @@ ws.onmessage = function(msg) {
             num_players.innerHTML = `${data.num} player(s)`;
             break;
         case 'startgame':
+            // TODO: Empty the plays div
+            // TODO: Make sure that game buttons are reset as well
             initializePlayerInfo(data.opponents);
             displayGameInfo();
             renderHand(data.hand);
@@ -129,14 +131,6 @@ function sendCards() {
 function passTurn() {
     var data = {
         type: "passturn",
-    };
-    ws.send(JSON.stringify(data));
-}
-
-// Attempt to restart the game
-function restartGame() {
-    var data = {
-        type: "restartgame",
     };
     ws.send(JSON.stringify(data));
 }

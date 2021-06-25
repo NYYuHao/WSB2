@@ -43,9 +43,6 @@ wss.on('connection', (ws, req) => {
             case "passturn":
                 passTurn(ws);
                 break;
-            case "restartgame":
-                restartGame(ws);
-                break;
             default:
                 console.error("ERROR: Unrecognized message type");
                 break;
@@ -231,12 +228,4 @@ function passTurn(ws) {
     else {
         console.error('Invalid attempt to pass turn');
     }
-}
-
-// Attempt to restart the game ws is in
-function restartGame(ws) {
-    // TODO: Maybe make this more robust
-    // i.e. if only two players reuse the remaining two hands
-    // and continue with whoever won the last game
-    startGame(ws);
 }

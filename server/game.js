@@ -4,13 +4,15 @@ class Game {
     constructor() {
         this.deck = [...Array(52).keys()]; // 0, 1, 2, 3 are Aces (D, C, H, S)
         this.numPlayers = 0;
+        this.numGames = 0;                 // Number of completed games
         this.currentPlayer = 0;
-        this.turn = 0;
-        this.consPasses = 0;
-        this.gameOver = false;
+        this.turn = 0;                     // Number of turns elapsed
+        this.consPasses = 0;               // Number of consecutive passes
+        this.gameOver = false;             // Did the game end?
         this.playerHands = [new Set(), new Set(), new Set(), new Set()];
-        this.playerOrder = new Map(); // {pid: playernum} pairs
-        this.lastCards = []; // Most recent play
+        this.playerOrder = new Map();      // {pid: playernum} pairs
+        this.lastCards = [];               // Most recent play
+        this.lastWinner = null;
     }
 
     // Shuffle the current deck
@@ -71,7 +73,22 @@ class Game {
         if (this.numPlayers < 1 || this.numPlayers > 4)
             throw "Invalid number of players";
 
-        // Find which player has closest to 3ofD
+        this.consPasses = 0;
+        this.turn = 0;
+        this.gameOver = false;
+        this.lastCards = [];
+
+        // If there was already a game, return whoever won last
+        if (this.numGames > 0) {
+            this.currentPlayer = this.lastWinner;
+            return {
+                firstPid: Array.from(this.playerOrder.keys()).find(
+                    (pid) => this.playerOrder.get(pid) == this.lastWinner),
+                firstPlayer: this.lastWinner
+            }
+        }
+
+        // Otherwise find which player has closest to 3ofD
         let mins = [];
         for (let i = 0; i < this.numPlayers; i++) {
             let fh = Array.from(this.playerHands[i])
@@ -100,16 +117,19 @@ class Game {
         // Make sure hand is playable
         if (!Game.compareHands(this.lastCards, cards))
             return false;
-        // In the first turn, make sure the lowest card is played
-        if (this.turn == 0 &&
+        // In the first turn (of the first game), make sure the lowest card is played
+        if (this.turn == 0 && this.numGames == 0 &&
             !cards.includes(Math.min(...Array.from(this.playerHands[playerNum])
                 .map((card) => (card < 8) ? card + 52 : card))))
             return false;
         // Remove cards from hand
         cards.forEach((card) => this.playerHands[playerNum].delete(card));
         // Check for game end
-        if (this.playerHands[playerNum].size == 0)
+        if (this.playerHands[playerNum].size == 0) {
             this.gameOver = true;
+            this.numGames++;
+            this.lastWinner = playerNum;
+        }
         this.lastCards = cards;
         this.currentPlayer = (this.currentPlayer+1)%this.numPlayers;
         this.turn++;
