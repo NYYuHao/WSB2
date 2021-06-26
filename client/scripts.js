@@ -12,8 +12,8 @@ const opponent_divs = [
     document.getElementById("top-player"),
     document.getElementById("left-player")
 ];
-const dim_overlay = document.getElementById("dim-overlay");
-const overlay_header = document.getElementById("overlay-header");
+const gameover_overlay = document.getElementById("gameover-overlay");
+const gameover_header = document.getElementById("gameover-header");
 var numPlays = 0;
 
 var handCards = new Set();          // Set representing client hand
@@ -41,10 +41,9 @@ ws.onmessage = function(msg) {
             num_players.innerHTML = `${data.num} player(s)`;
             break;
         case 'startgame':
-            // TODO: Empty the plays div
-            // TODO: Make sure that game buttons are reset as well
             initializePlayerInfo(data.opponents);
             displayGameInfo();
+            undisplayTurn();
             renderHand(data.hand);
             undisplaySettings();
             break;
@@ -179,35 +178,39 @@ function cardToObject(card) {
 
 // HTML Updates
 
-// Initialize player map with relevant divs
-// based on opponents
+// Initialize player map with relevant divs based on opponents
+// TODO: Maybe don't call this on every game restart
 function initializePlayerInfo(opponents) {
     for (i = 0; i < opponents.length; i++) {
         let opponent_div = opponent_divs[i];
         opponent_div.innerHTML = `Player ${opponents[i].opponentNum}`;
+        opponent_div.style.background = '#EDEDED';
 
         let opponent_card = document.createElement("div");
         opponent_card.className = 'info-card played-card';
         opponent_card.innerHTML = opponents[i].opponentHandSize;
         opponent_div.appendChild(opponent_card);
-        // Store divs for updating later
+
+        // Store opponent card and div for use later
         opponent_info[opponents[i].opponentNum] = {
             infoContainer: opponent_div,
             infoCard: opponent_card
         }
+
         opponent_div.style.display = "block";
     }
 }
 
 // Display game info at the start of a game
-// Render player info depending on opponents
-function displayGameInfo(opponents) {
+// Remove and plays from previous games
+function displayGameInfo() {
     plays_div.style.display = 'flex';
+    while (plays_div.firstChild) {plays_div.removeChild(plays_div.lastChild);}
 }
 
 // Remove the game settings div + overlay and display plays
 function undisplaySettings() {
-    dim_overlay.style.display = 'none';
+    gameover_overlay.style.display = 'none';
     game_settings_div.style.display = 'none';
 }
 
@@ -312,8 +315,8 @@ function displayTurnPass(playerNum) {
     addPlay(turn);
 }
 
-// Display the dim overlay when the game is over with the winner
+// Display the gameover overlay when the game is over with the winner
 function displayGameOver(winner) {
-    dim_overlay.style.display = 'block';
-    overlay_header.innerHTML = `Player ${winner} won!`;
+    gameover_overlay.style.display = 'block';
+    gameover_header.innerHTML = `Player ${winner} won!`;
 }
