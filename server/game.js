@@ -12,6 +12,7 @@ class Game {
         this.playerHands = [new Set(), new Set(), new Set(), new Set()];
         this.playerOrder = new Map();      // {pid: playernum} pairs
         this.lastCards = [];               // Most recent play
+        this.playerWins = [];              // Number of wins for each playernum
         this.lastWinner = null;
     }
 
@@ -45,6 +46,7 @@ class Game {
     // Add a player pid to the game
     addPlayer(pid) {
         if (this.numPlayers > 3) throw "Invalid attempt to add player";
+        this.playerWins.push(0);
         this.playerOrder.set(pid, this.numPlayers++);
     }
 
@@ -66,6 +68,11 @@ class Game {
             });
         }
         return opponents;
+    }
+
+    // Return the playerWins array
+    getWins() {
+        return this.playerWins;
     }
 
     // Start the game (i.e. determine player order, return start pid)
@@ -128,6 +135,7 @@ class Game {
         if (this.playerHands[playerNum].size == 0) {
             this.gameOver = true;
             this.numGames++;
+            this.playerWins[playerNum]++;
             this.lastWinner = playerNum;
         }
         this.lastCards = cards;

@@ -187,7 +187,8 @@ function playTurn(ws, cards) {
             playerPids.forEach((pid) => pidTable[pid].send(
                 JSON.stringify({
                     type: 'gameover',
-                    winner: turnResult.lastPlayer+1
+                    winner: turnResult.lastPlayer+1,
+                    numWins: game.getWins()
                 }
             )));
         }

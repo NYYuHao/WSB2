@@ -14,8 +14,9 @@ const opponent_divs = [
 ];
 const gameover_overlay = document.getElementById("gameover-overlay");
 const gameover_header = document.getElementById("gameover-header");
-var numPlays = 0;
+const gameover_text = document.getElementById("gameover-text");
 
+var numPlays = 0; 
 var handCards = new Set();          // Set representing client hand
 var selectedCards = new Set();      // Set representing selected cards
 var selectedCardDivs = new Set();   // Set representing selected divs
@@ -69,7 +70,7 @@ ws.onmessage = function(msg) {
             updateOpponentColor(data.currentPlayer);
             break;
         case 'gameover':
-            displayGameOver(data.winner);
+            displayGameOver(data.winner, data.numWins);
             break;
     }
 }
@@ -181,6 +182,8 @@ function cardToObject(card) {
 // Initialize player map with relevant divs based on opponents
 // TODO: Maybe don't call this on every game restart
 function initializePlayerInfo(opponents) {
+    numPlays = 0;
+
     for (i = 0; i < opponents.length; i++) {
         let opponent_div = opponent_divs[i];
         opponent_div.innerHTML = `Player ${opponents[i].opponentNum}`;
@@ -316,7 +319,16 @@ function displayTurnPass(playerNum) {
 }
 
 // Display the gameover overlay when the game is over with the winner
-function displayGameOver(winner) {
+// and the number of wins for every player so far
+function displayGameOver(winner, numWins) {
     gameover_overlay.style.display = 'block';
     gameover_header.innerHTML = `Player ${winner} won!`;
+    while (gameover_text.firstChild)
+        {gameover_text.removeChild(gameover_text.lastChild);}
+    for (let i = 0; i < numWins.length; i++) {
+        let p = document.createElement("p");
+        p.appendChild(
+            document.createTextNode(`Player ${i+1}: ${numWins[i]} wins`));
+        gameover_text.appendChild(p);
+    }
 }
