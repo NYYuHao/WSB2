@@ -52,6 +52,28 @@ wss.on('connection', (ws, req) => {
     // Handle disconnect
     ws.on('close', (code) => {
         console.log(`Connection closed\tPID: ${ws.pid}`);
+        connectionsSet.delete(ws.pid);
+        delete pidTable[ws.pid];
+
+        // If the user was part of a game, remove them from the table
+        if (ws.gameid) {
+            let game = gamesTable[ws.gameid];
+
+            // If the game was started, all players should leave as well
+            if (game.getGameStarted()) {
+                
+            }
+            // Otherwise, just remove this user and close game if necessary
+            else {
+                if (game.getNumPlayers() > 1) {
+                    game.removePlayer(ws.pid);
+                }
+                else {
+                    console.log(`Closing game\tGID: ${ws.gameid}`);
+                    delete gamesTable[ws.gameid];
+                }
+            }
+        }
     })
 });
 

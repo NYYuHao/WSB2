@@ -8,12 +8,12 @@ class Game {
         this.currentPlayer = 0;
         this.turn = 0;                     // Number of turns elapsed
         this.consPasses = 0;               // Number of consecutive passes
-        this.gameOver = false;             // Did the game end?
         this.playerHands = [new Set(), new Set(), new Set(), new Set()];
         this.playerOrder = new Map();      // {pid: playernum} pairs
         this.lastCards = [];               // Most recent play
         this.playerWins = [];              // Number of wins for each playernum
         this.lastWinner = null;
+        this.gameOver = true;              // Did the game end?
     }
 
     // Shuffle the current deck
@@ -44,10 +44,28 @@ class Game {
     }
 
     // Add a player pid to the game
+    // Can only be done prior to the start of the game
     addPlayer(pid) {
-        if (this.numPlayers > 3) throw "Invalid attempt to add player";
+        if (this.numPlayers > 3 || this.getGameStarted())
+            throw "Invalid attempt to add player";
         this.playerWins.push(0);
         this.playerOrder.set(pid, this.numPlayers++);
+    }
+
+    // Remove a player pid from the game
+    // Can only be done prior to the start of the game
+    removePlayer(pid) {
+        // TODO: When player 1 disconnects, this throws?
+        if (!this.playerOrder.get(pid) || this.getGameStarted())
+            throw "Invalid attempt to remove player";
+        this.numPlayers--;
+        this.playerWins.pop();
+        this.playerOrder.delete(pid);
+    }
+
+    // Return an array copy of the pids in the game
+    getNumPlayers() {
+        return this.numPlayers;
     }
 
     // Return an array copy of the pids in the game
@@ -75,6 +93,11 @@ class Game {
         return this.playerWins;
     }
 
+    // Return true if the game has ever begun
+    getGameStarted() {
+        return this.numGames > 0;
+    }
+
     // Start the game (i.e. determine player order, return start pid)
     startGame() {
         if (this.numPlayers < 1 || this.numPlayers > 4)
@@ -84,9 +107,10 @@ class Game {
         this.turn = 0;
         this.gameOver = false;
         this.lastCards = [];
+        this.numGames++;
 
         // If there was already a game, return whoever won last
-        if (this.numGames > 0) {
+        if (this.numGames > 1) {
             this.currentPlayer = this.lastWinner;
             return {
                 firstPid: Array.from(this.playerOrder.keys()).find(
@@ -125,7 +149,7 @@ class Game {
         if (!Game.compareHands(this.lastCards, cards))
             return false;
         // In the first turn (of the first game), make sure the lowest card is played
-        if (this.turn == 0 && this.numGames == 0 &&
+        if (this.turn == 0 && this.numGames == 1 &&
             !cards.includes(Math.min(...Array.from(this.playerHands[playerNum])
                 .map((card) => (card < 8) ? card + 52 : card))))
             return false;
@@ -134,7 +158,6 @@ class Game {
         // Check for game end
         if (this.playerHands[playerNum].size == 0) {
             this.gameOver = true;
-            this.numGames++;
             this.playerWins[playerNum]++;
             this.lastWinner = playerNum;
         }
