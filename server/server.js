@@ -60,7 +60,7 @@ wss.on('connection', (ws, req) => {
             let game = gamesTable[ws.gameid];
 
             // If the game was started, all players should leave as well
-            if (game.getGameStarted()) {
+            if (game.isGameStarted()) {
                 
             }
             // Otherwise, just remove this user and close game if necessary
@@ -147,8 +147,10 @@ function startGame(ws) {
 
     console.log(`Starting game\tGID: ${ws.gameid}`);
 
+    game.initialize();
     game.shuffle();
     game.deal();
+
     for (let i = 0; i < players.length; i++) {
         pidTable[players[i]].send(JSON.stringify(
             {

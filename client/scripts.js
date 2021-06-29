@@ -252,6 +252,7 @@ function displayStart() {
 
 // When it's the user's turn, display send and pass button
 function displayTurn() {
+    console.log("Displaying turn");
     game_buttons_div.style.display = 'flex';
 }
 

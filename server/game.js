@@ -9,11 +9,20 @@ class Game {
         this.turn = 0;                     // Number of turns elapsed
         this.consPasses = 0;               // Number of consecutive passes
         this.playerHands = [new Set(), new Set(), new Set(), new Set()];
+        this.players = new Set();          // Set of pids in the game
         this.playerOrder = new Map();      // {pid: playernum} pairs
         this.lastCards = [];               // Most recent play
         this.playerWins = [];              // Number of wins for each playernum
         this.lastWinner = null;
         this.gameOver = true;              // Did the game end?
+    }
+
+    // Initialize playerOrder, if it hasn't been initialized already
+    initialize() {
+        if (this.playerOrder.size == 0) {
+            let i = 0;
+            this.players.forEach((pid) => this.playerOrder.set(pid, i++));
+        }
     }
 
     // Shuffle the current deck
@@ -46,21 +55,21 @@ class Game {
     // Add a player pid to the game
     // Can only be done prior to the start of the game
     addPlayer(pid) {
-        if (this.numPlayers > 3 || this.getGameStarted())
+        if (this.numPlayers > 3 || this.isGameStarted())
             throw "Invalid attempt to add player";
+        this.numPlayers++;
+        this.players.add(pid);
         this.playerWins.push(0);
-        this.playerOrder.set(pid, this.numPlayers++);
     }
 
     // Remove a player pid from the game
     // Can only be done prior to the start of the game
     removePlayer(pid) {
-        // TODO: When player 1 disconnects, this throws?
-        if (!this.playerOrder.get(pid) || this.getGameStarted())
+        if (!this.players.has(pid) || this.isGameStarted())
             throw "Invalid attempt to remove player";
         this.numPlayers--;
+        this.players.delete(pid);
         this.playerWins.pop();
-        this.playerOrder.delete(pid);
     }
 
     // Return an array copy of the pids in the game
@@ -70,7 +79,7 @@ class Game {
 
     // Return an array copy of the pids in the game
     getPlayers() {
-        return Array.from(this.playerOrder.keys());
+        return Array.from(this.players);
     }
 
     // Return an array of player pid's opponent nums and their hand sizes
@@ -94,7 +103,7 @@ class Game {
     }
 
     // Return true if the game has ever begun
-    getGameStarted() {
+    isGameStarted() {
         return this.numGames > 0;
     }
 
@@ -119,7 +128,11 @@ class Game {
             }
         }
 
-        // Otherwise find which player has closest to 3ofD
+        // Otherwise initialize playerOrder
+        // and find which player has closest to 3ofD
+        let i = 0;
+        this.players.forEach((pid) => this.playerOrder.set(pid, i++));
+
         let mins = [];
         for (let i = 0; i < this.numPlayers; i++) {
             let fh = Array.from(this.playerHands[i])
