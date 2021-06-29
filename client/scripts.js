@@ -6,6 +6,7 @@ const start_button = document.getElementById("start-button");
 const num_players = document.getElementById("num-players");
 const plays_div = document.getElementById("plays");
 const hand_div = document.getElementById("hand");
+const game_div = document.getElementById("game");
 const game_buttons_div = document.getElementById("game-buttons");
 const opponent_divs = [
     document.getElementById("right-player"),
@@ -112,6 +113,7 @@ function leaveGame() {
         type: "leavegame"
     };
     ws.send(JSON.stringify(data));
+    displaySettings();
 }
 
 // Select or deselect a card by adding/removing it in selectedCards
@@ -219,16 +221,20 @@ function initializePlayerInfo(opponents) {
 }
 
 // Display game info at the start of a game
-// Remove plays from previous games
+// Remove plays from previous games and display hand
 function displayGameInfo() {
+    game_div.style.display = 'flex';
     plays_div.style.display = 'flex';
     while (plays_div.firstChild) {plays_div.removeChild(plays_div.lastChild);}
 }
 
 // Display game settings div
+// and remove all game divs
 function displaySettings() {
     gameover_overlay.style.display = 'none';
     game_settings_div.style.display = 'block';
+    game_div.style.display = 'none';
+    // TODO: Reset this so player no longer appears in room
 }
 
 // Remove the game settings div

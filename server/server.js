@@ -132,6 +132,7 @@ function joinGame(ws, gameid) {
 }
 
 // Leave and close the game ws is a part of
+// Also remove all players
 function leaveGame(ws) {
     let game = gamesTable[ws.gameid];
     
@@ -140,8 +141,8 @@ function leaveGame(ws) {
             pidTable[pid].send(JSON.stringify({
                 type: 'gamedisconnect'
             }));
-            // TODO: These players should also disassociate from their games
         }
+        delete pidTable[pid];
     });
 
     delete gamesTable[ws.gameid];
