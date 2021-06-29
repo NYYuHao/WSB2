@@ -15,6 +15,9 @@ const opponent_divs = [
 const gameover_overlay = document.getElementById("gameover-overlay");
 const gameover_header = document.getElementById("gameover-header");
 const gameover_text = document.getElementById("gameover-text");
+const restart_button = document.getElementById("restart-button");
+const leave_button = document.getElementById("leave-button");
+const home_button = document.getElementById("home-button");
 
 var numPlays = 0; 
 var handCards = new Set();          // Set representing client hand
@@ -72,6 +75,9 @@ ws.onmessage = function(msg) {
         case 'gameover':
             displayGameOver(data.winner, data.numWins);
             break;
+        case `gamedisconnect`:
+            displayGameDisconnect();
+            break;
     }
 }
 
@@ -96,6 +102,14 @@ function joinGame() {
 function startGame() {
     var data = {
         type: "startgame"
+    };
+    ws.send(JSON.stringify(data));
+}
+
+// Attempt to leave a game (and close it for all players)
+function leaveGame() {
+    var data = {
+        type: "leavegame"
     };
     ws.send(JSON.stringify(data));
 }
@@ -205,13 +219,19 @@ function initializePlayerInfo(opponents) {
 }
 
 // Display game info at the start of a game
-// Remove and plays from previous games
+// Remove plays from previous games
 function displayGameInfo() {
     plays_div.style.display = 'flex';
     while (plays_div.firstChild) {plays_div.removeChild(plays_div.lastChild);}
 }
 
-// Remove the game settings div + overlay and display plays
+// Display game settings div
+function displaySettings() {
+    gameover_overlay.style.display = 'none';
+    game_settings_div.style.display = 'block';
+}
+
+// Remove the game settings div
 function undisplaySettings() {
     gameover_overlay.style.display = 'none';
     game_settings_div.style.display = 'none';
@@ -252,7 +272,6 @@ function displayStart() {
 
 // When it's the user's turn, display send and pass button
 function displayTurn() {
-    console.log("Displaying turn");
     game_buttons_div.style.display = 'flex';
 }
 
@@ -332,4 +351,18 @@ function displayGameOver(winner, numWins) {
             document.createTextNode(`Player ${i+1}: ${numWins[i]} wins`));
         gameover_text.appendChild(p);
     }
+    restart_button.style.display = 'block';
+    leave_button.style.display = 'block';
+    home_button.style.display = 'none';
+}
+
+// Display the gameover overlay with disconnect text, prompting game leave
+function displayGameDisconnect() {
+    gameover_overlay.style.display = 'block';
+    gameover_header.innerHTML = "Player disconnected";
+    while (gameover_text.firstChild)
+        {gameover_text.removeChild(gameover_text.lastChild);}
+    restart_button.style.display = 'none';
+    leave_button.style.display = 'none';
+    home_button.style.display = 'block';
 }

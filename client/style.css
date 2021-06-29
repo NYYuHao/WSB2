@@ -182,10 +182,10 @@
     position: absolute;
     bottom: 50px;
     width: 100%;
-    justify-content: center;
+    justify-content: space-around;
 }
 
 .overlay-button {
     height: 50px;
-    width: 200px;
+    width: 150px;
 }

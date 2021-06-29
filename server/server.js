@@ -43,6 +43,9 @@ wss.on('connection', (ws, req) => {
             case "passturn":
                 passTurn(ws);
                 break;
+            case "leavegame":
+                leaveGame(ws);
+                break;
             default:
                 console.error("ERROR: Unrecognized message type");
                 break;
@@ -61,7 +64,7 @@ wss.on('connection', (ws, req) => {
 
             // If the game was started, all players should leave as well
             if (game.isGameStarted()) {
-                
+                leaveGame(ws);
             }
             // Otherwise, just remove this user and close game if necessary
             else {
@@ -126,6 +129,22 @@ function joinGame(ws, gameid) {
     // Update the members of the game with the player count
     updateNumPlayers(gameid)
     return {type: 'joingame', id: gameid, success: true};
+}
+
+// Leave and close the game ws is a part of
+function leaveGame(ws) {
+    let game = gamesTable[ws.gameid];
+    
+    game.getPlayers().forEach((pid) => {
+        if (pid != ws.pid) {
+            pidTable[pid].send(JSON.stringify({
+                type: 'gamedisconnect'
+            }));
+            // TODO: These players should also disassociate from their games
+        }
+    });
+
+    delete gamesTable[ws.gameid];
 }
 
 // Update the number of players for every client in a game with gameid
