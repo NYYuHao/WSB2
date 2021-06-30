@@ -30,9 +30,6 @@ ws.onmessage = function(msg) {
     var data = JSON.parse(msg.data);
     
     switch (data.type) {
-        case 'notification':
-            message_div.innerHTML = data.text;
-            break;
         case 'creategame':
         case 'joingame':
             if (data.success) {
@@ -234,7 +231,9 @@ function displaySettings() {
     gameover_overlay.style.display = 'none';
     game_settings_div.style.display = 'block';
     game_div.style.display = 'none';
-    // TODO: Reset this so player no longer appears in room
+    message_div.innerHTML = 'Game code:'
+    num_players.innerHTML = '';
+    start_button.style.display = 'none';
 }
 
 // Remove the game settings div

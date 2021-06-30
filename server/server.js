@@ -9,10 +9,6 @@ var connectionsSet = new Set(); // Set of connected pids (not just those in a ga
 
 console.log("Listening on port 8000...");
 wss.on('connection', (ws, req) => {
-    // Send a message on initial connection
-    let initial = {type: 'notification', text: `Players: ${wss.clients.size}`};
-    ws.send(JSON.stringify(initial));
-
     // Create a unique player id for the ws
     let pid;
     do {
@@ -158,12 +154,17 @@ function updateNumPlayers(gameid) {
 
 // Start the game for all players in a lobby
 function startGame(ws) {
+    // Ensure that the game exists
+    if (!gamesTable.hasOwnProperty(ws.gameid))
+        throw "Invalid attempt to start game";
+
     let game = gamesTable[ws.gameid];
     let players = gamesTable[ws.gameid].getPlayers();
 
     // Verify that ws is actually a part of game gameid
     // TODO: Maybe make this return something instead of throw?
-    if (!players.includes(ws.pid)) throw "Invalid attempt to start game";
+    if (!players.includes(ws.pid) || players.length < 2)
+        throw "Invalid attempt to start game";
 
     console.log(`Starting game\tGID: ${ws.gameid}`);
 

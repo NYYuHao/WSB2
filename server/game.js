@@ -109,7 +109,7 @@ class Game {
 
     // Start the game (i.e. determine player order, return start pid)
     startGame() {
-        if (this.numPlayers < 1 || this.numPlayers > 4)
+        if (this.numPlayers < 2 || this.numPlayers > 4)
             throw "Invalid number of players";
 
         this.consPasses = 0;
