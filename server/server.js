@@ -1,13 +1,19 @@
+const PORT = process.env.PORT || 3000;
+
+const express = require('express'); 
+const server = express()
+    .use(express.static(__dirname + '/../client/'))
+    .listen(PORT, () => console.log(`Listening on port ${PORT}...`));
+
 const {Server} = require('ws');
 const crypto = require('crypto');
-const wss = new Server({port: 8000});
+const wss = new Server({server});
 const Game = require('./game.js');
 
 var gamesTable = {};    // Holds the ongoing games in [id: game] pairs
 var pidTable = {}       // Holds {playerid: ws} pairs for all players in a game
 var connectionsSet = new Set(); // Set of connected pids (not just those in a game)
 
-console.log("Listening on port 8000...");
 wss.on('connection', (ws, req) => {
     // Create a unique player id for the ws
     let pid;

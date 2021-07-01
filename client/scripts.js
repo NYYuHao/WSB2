@@ -1,4 +1,5 @@
-const ws = new WebSocket("ws://localhost:8000");
+const HOST = location.origin.replace(/^http/, 'ws');
+const ws = new WebSocket(HOST);
 
 const message_div = document.getElementById("message-div");
 const game_settings_div = document.getElementById("game-settings");
