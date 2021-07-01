@@ -23,24 +23,55 @@ wss.on('connection', (ws, req) => {
     ws.on('message', (data) => {
         let msg = JSON.parse(data);
         
+        // TODO: Make exception handling more robust
         switch (msg.type) {
             case "creategame":
-                ws.send(JSON.stringify(createGame(ws)));
+                try {
+                    ws.send(JSON.stringify(createGame(ws)));
+                }
+                catch (exception) {
+                    console.error(exception);
+                }
                 break;
             case "joingame":
-                ws.send(JSON.stringify(joinGame(ws, msg.gameid)));
+                try {
+                    ws.send(JSON.stringify(joinGame(ws, msg.gameid)));
+                }
+                catch (exception) {
+                    console.error(exception);
+                }
                 break;
             case "startgame":
-                startGame(ws);
+                try {
+                    startGame(ws);
+                }
+                catch (exception) {
+                    console.error(exception);
+                }
                 break;
             case "playturn":
-                playTurn(ws, msg.cards);
+                try {
+                    playTurn(ws, msg.cards);
+                }
+                catch (exception) {
+                    console.error(exception);
+                }
                 break;
             case "passturn":
-                passTurn(ws);
+                try {
+                    passTurn(ws);
+                }
+                catch (exception) {
+                    console.error(exception);
+                }
                 break;
             case "leavegame":
-                leaveGame(ws);
+                try {
+                    leaveGame(ws);
+                }
+                catch (exception) {
+                    console.error(exception);
+                }
                 break;
             default:
                 console.error("ERROR: Unrecognized message type");
@@ -130,6 +161,9 @@ function joinGame(ws, gameid) {
 // Leave and close the game ws is a part of
 // Also remove all players
 function leaveGame(ws) {
+    // Make sure the game still exists
+    if (!gamesTable.hasOwnProperty(ws.gameid))
+        throw "Invalid attempt to leave game";
     let game = gamesTable[ws.gameid];
     
     game.getPlayers().forEach((pid) => {
