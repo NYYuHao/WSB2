@@ -208,7 +208,6 @@ function startGame(ws) {
     let players = gamesTable[ws.gameid].getPlayers();
 
     // Verify that ws is actually a part of game gameid
-    // TODO: Maybe make this return something instead of throw?
     if (!players.includes(ws.pid) || players.length < 2)
         throw "Invalid attempt to start game";
 
