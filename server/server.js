@@ -111,6 +111,11 @@ wss.on('connection', (ws, req) => {
             }
         }
     })
+
+    // Print errors
+    ws.on('error', (error) => {
+        console.error(`Websocket error: ${error}`);
+    })
 });
 
 
@@ -177,8 +182,9 @@ function leaveGame(ws) {
             pidTable[pid].send(JSON.stringify({
                 type: 'gamedisconnect'
             }));
+            delete pidTable[pid].gameid;
+            delete pidTable[pid];
         }
-        delete pidTable[pid];
     });
 
     delete gamesTable[ws.gameid];
