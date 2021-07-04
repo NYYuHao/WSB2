@@ -27,7 +27,7 @@ body {
 
 /* Container for entire game */
 .game {
-    display: flex;
+    display: none;
     flex-flow: row wrap;
     justify-content: center;
     align-items: center;
@@ -37,16 +37,13 @@ body {
 
 /* Container for game buttons and cards */
 .control {
-    position: fixed;
-    bottom: 0%;
-    left: 50%;
-    transform: translateX(-50%);
+    margin-top: 50px;
     width: 100%;
 }
 
 /* Container for play and pass buttons */
 .game-buttons {
-    display: none;
+    display: flex;
     justify-content: center;
 }
 
@@ -63,6 +60,7 @@ body {
     display: flex;
     flex-flow: row wrap;
     justify-content: center;
+    max-width: 1000px;
 }
 
 /* Card (in hand only) */
@@ -74,7 +72,7 @@ body {
     height: 10.5vh;
     line-height: 10.5vh;
     text-align: center;
-    margin: 2px;
+    margin: 5px;
     box-shadow: 1px 1px 3px gray;
     transition: background 0.2s;
     background: #FFFFFF;

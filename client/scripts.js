@@ -278,12 +278,12 @@ function displayStart() {
 
 // When it's the user's turn, display send and pass button
 function displayTurn() {
-    game_buttons_div.style.display = 'flex';
+    game_buttons_div.style.visibility = 'visible';
 }
 
 // After the user takes their turn, undisplay send and pass
 function undisplayTurn() {
-    game_buttons_div.style.display = 'none';
+    game_buttons_div.style.visibility = 'hidden';
 }
 
 // Clears the selected cards and removes them from display
