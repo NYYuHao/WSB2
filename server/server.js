@@ -118,6 +118,13 @@ wss.on('connection', (ws, req) => {
     })
 });
 
+// Ping all the clients
+setInterval(() => {
+    wss.clients.forEach((ws) => {
+        ws.ping(() => {});
+    });
+}, 30000);
+
 
 // Create a game for player ws and add it to the gamesTable
 // Returns the resulting randomly generated id and whether the game was created
