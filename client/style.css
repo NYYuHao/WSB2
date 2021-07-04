@@ -83,16 +83,12 @@ body {
     vertical-align: middle;
 }
 
-.card:hover {
-    background: #E2E2E2;
-}
-
 .unselected {
     background: #FFFFFF;
 }
 
 .selected {
-    background: #B5B5B5;
+    background: #E2E2E2;
 }
 
 /* Container for turns */
