@@ -9,6 +9,8 @@ const plays_div = document.getElementById("plays");
 const hand_div = document.getElementById("hand");
 const game_div = document.getElementById("game");
 const game_buttons_div = document.getElementById("game-buttons");
+const send_button = document.getElementById("send-button");
+const pass_button = document.getElementById("pass-button");
 const opponent_divs = [
     document.getElementById("right-player"),
     document.getElementById("top-player"),
@@ -49,6 +51,7 @@ ws.onmessage = function(msg) {
             undisplayTurn();
             renderHand(data.hand);
             undisplaySettings();
+            togglePlayPass();
             break;
         case 'turnstart':
             displayTurn();
@@ -63,10 +66,12 @@ ws.onmessage = function(msg) {
         case 'turncards':
             updateOpponentInfo(data.handSize, data.lastPlayer);
             displayTurnCards(data.cards, data.lastPlayer);
+            togglePlayPass();
             break;
         case 'turnpass':
             updateOpponentInfo(data.handSize, data.lastPlayer);
             displayTurnPass(data.lastPlayer);
+            togglePlayPass();
             break;
         case 'updateopponent':
             updateOpponentColor(data.currentPlayer);
@@ -128,6 +133,7 @@ function selectCard(cardDiv, cardVal) {
         selectedCardDivs.delete(cardDiv);
         cardDiv.className = 'card unselected';
     }
+    togglePlayPass();
 }
 
 // Attempt to send the selected cards
@@ -284,6 +290,18 @@ function displayTurn() {
 // After the user takes their turn, undisplay send and pass
 function undisplayTurn() {
     game_buttons_div.style.visibility = 'hidden';
+}
+
+// Switch between pass button and play button
+function togglePlayPass() {
+    if (selectedCards.size == 0) {
+        pass_button.style.display = 'block';
+        send_button.style.display = 'none';
+    }
+    else {
+        pass_button.style.display = 'none';
+        send_button.style.display = 'block';
+    }
 }
 
 // Clears the selected cards and removes them from display
