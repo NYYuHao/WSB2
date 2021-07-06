@@ -89,27 +89,7 @@ wss.on('connection', (ws, req) => {
     ws.on('close', (code) => {
         console.log(`Connection closed\tPID: ${ws.pid}`);
         connectionsSet.delete(ws.pid);
-        delete pidTable[ws.pid];
-
-        // If the user was part of a game, remove them from the table
-        if (ws.gameid) {
-            let game = gamesTable[ws.gameid];
-
-            // If the game was started, all players should leave as well
-            if (game.isGameStarted()) {
-                leaveGame(ws);
-            }
-            // Otherwise, just remove this user and close game if necessary
-            else {
-                if (game.getNumPlayers() > 1) {
-                    game.removePlayer(ws.pid);
-                }
-                else {
-                    console.log(`Closing game\tGID: ${ws.gameid}`);
-                    delete gamesTable[ws.gameid];
-                }
-            }
-        }
+        leaveGame(ws);
     })
 
     // Print errors
@@ -176,12 +156,44 @@ function joinGame(ws, gameid) {
     return {type: 'joingame', id: gameid, success: true};
 }
 
-// Leave and close the game ws is a part of
-// Also remove all players
+// Leave the game for player ws, closing the game if necessary
 function leaveGame(ws) {
+    if (!pidTable[ws.pid])
+        throw 'Invalid attempt to leave game';
+
+    console.log(`Leaving game\tGID: ${ws.gameid}\tPID:${ws.pid}`);
+    delete pidTable[ws.pid];
+
+    // If the user was part of a game, remove them from the table
+    if (ws.gameid) {
+        let game = gamesTable[ws.gameid];
+
+        // If the game was started, close the entire game
+        if (game.isGameStarted()) {
+            closeGame(ws);
+        }
+        // Otherwise, just remove this user and close game if necessary
+        else {
+            if (game.getNumPlayers() > 1) {
+                game.removePlayer(ws.pid);
+                updateNumPlayers(ws.gameid)
+            }
+            else {
+                console.log(`Closing game\tGID: ${ws.gameid}`);
+                delete gamesTable[ws.gameid];
+            }
+        }
+    }
+}
+
+// Close the game ws is a part of
+// Also remove all players
+function closeGame(ws) {
     // Make sure the game still exists
     if (!gamesTable.hasOwnProperty(ws.gameid))
         throw "Invalid attempt to leave game";
+    
+    console.log(`Closing game\tGID: ${ws.gameid}`);
     let game = gamesTable[ws.gameid];
     
     game.getPlayers().forEach((pid) => {

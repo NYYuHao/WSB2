@@ -3,6 +3,7 @@ const ws = new WebSocket(HOST);
 
 const message_div = document.getElementById("message-div");
 const game_settings_div = document.getElementById("game-settings");
+const leave_button = document.getElementById("leave-button");
 const start_button = document.getElementById("start-button");
 const num_players = document.getElementById("num-players");
 const plays_div = document.getElementById("plays");
@@ -20,7 +21,7 @@ const gameover_overlay = document.getElementById("gameover-overlay");
 const gameover_header = document.getElementById("gameover-header");
 const gameover_text = document.getElementById("gameover-text");
 const restart_button = document.getElementById("restart-button");
-const leave_button = document.getElementById("leave-button");
+const end_leave_button = document.getElementById("end-leave-button");
 const home_button = document.getElementById("home-button");
 
 var numPlays = 0; 
@@ -241,6 +242,7 @@ function displaySettings() {
     message_div.innerHTML = 'Game code:'
     num_players.innerHTML = '';
     start_button.style.display = 'none';
+    leave_button.style.display = 'none';
 }
 
 // Remove the game settings div
@@ -280,6 +282,7 @@ function renderHand(hand) {
 // Update the HTML with the start game button
 function displayStart() {
     start_button.style.display = 'block';
+    leave_button.style.display = 'block';
 }
 
 // When it's the user's turn, display send and pass button
@@ -376,7 +379,7 @@ function displayGameOver(winner, numWins) {
         gameover_text.appendChild(p);
     }
     restart_button.style.display = 'block';
-    leave_button.style.display = 'block';
+    end_leave_button.style.display = 'block';
     home_button.style.display = 'none';
 }
 
@@ -387,6 +390,6 @@ function displayGameDisconnect() {
     while (gameover_text.firstChild)
         {gameover_text.removeChild(gameover_text.lastChild);}
     restart_button.style.display = 'none';
-    leave_button.style.display = 'none';
+    end_leave_button.style.display = 'none';
     home_button.style.display = 'block';
 }
