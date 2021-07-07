@@ -297,7 +297,8 @@ function playTurn(ws, cards) {
                 JSON.stringify({
                     type: 'gameover',
                     winner: turnResult.lastPlayer+1,
-                    numWins: game.getWins()
+                    numWins: game.getWins(),
+                    cards: cards
                 }
             )));
         }

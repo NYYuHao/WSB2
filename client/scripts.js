@@ -78,7 +78,7 @@ ws.onmessage = function(msg) {
             updateOpponentColor(data.currentPlayer);
             break;
         case 'gameover':
-            displayGameOver(data.winner, data.numWins);
+            displayGameOver(data.winner, data.numWins, data.cards);
             break;
         case `gamedisconnect`:
             displayGameDisconnect();
@@ -365,13 +365,28 @@ function displayTurnPass(playerNum) {
     addPlay(turn);
 }
 
-// Display the gameover overlay when the game is over with the winner
-// and the number of wins for every player so far
-function displayGameOver(winner, numWins) {
+// Display the gameover overlay when the game is over with the winner,
+// the number of wins for every player so far, and the last played hand
+function displayGameOver(winner, numWins, cards) {
     gameover_overlay.style.display = 'block';
     gameover_header.innerHTML = `Player ${winner} won!`;
+
     while (gameover_text.firstChild)
         {gameover_text.removeChild(gameover_text.lastChild);}
+
+    let turn = document.createElement('div');
+    turn.className = 'turn';
+    // Render every played card
+    for (let i = 0; i < cards.length; i++) {
+        let card = document.createElement('div');
+        card.className = "played-card";
+        let stats = cardToObject(cards[i]);
+        card.innerHTML = stats.value + stats.suit;
+        card.style.color = stats.color;
+        turn.appendChild(card);
+    }
+    gameover_text.appendChild(turn);
+
     for (let i = 0; i < numWins.length; i++) {
         let p = document.createElement("p");
         p.appendChild(
