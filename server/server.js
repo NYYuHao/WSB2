@@ -158,6 +158,7 @@ function joinGame(ws, gameid) {
 
 // Leave the game for player ws, closing the game if necessary
 function leaveGame(ws) {
+    // TODO: Something happened here when two players refreshed simultaenously
     if (!pidTable[ws.pid])
         throw 'Invalid attempt to leave game';
 

@@ -18,6 +18,7 @@ const opponent_divs = [
     document.getElementById("left-player")
 ];
 const gameover_overlay = document.getElementById("gameover-overlay");
+const overlay_card = document.getElementById("overlay-card");
 const gameover_header = document.getElementById("gameover-header");
 const gameover_text = document.getElementById("gameover-text");
 const restart_button = document.getElementById("restart-button");
@@ -371,11 +372,12 @@ function displayGameOver(winner, numWins, cards) {
     gameover_overlay.style.display = 'block';
     gameover_header.innerHTML = `Player ${winner} won!`;
 
+    // TODO: Need to also remove cards from previous games
     while (gameover_text.firstChild)
         {gameover_text.removeChild(gameover_text.lastChild);}
 
     let turn = document.createElement('div');
-    turn.className = 'turn';
+    turn.className = 'turn winning-turn';
     // Render every played card
     for (let i = 0; i < cards.length; i++) {
         let card = document.createElement('div');
@@ -385,7 +387,7 @@ function displayGameOver(winner, numWins, cards) {
         card.style.color = stats.color;
         turn.appendChild(card);
     }
-    gameover_text.appendChild(turn);
+    overlay_card.appendChild(turn);
 
     for (let i = 0; i < numWins.length; i++) {
         let p = document.createElement("p");

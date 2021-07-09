@@ -171,8 +171,22 @@ body {
 }
 
 .overlay-header {
-    margin: 50px;
+    margin: 30px;
     font-size: 20px;
+}
+
+.winning-turn {
+    display: flex;
+    justify-content: center;
+    margin: auto;
+}
+
+.overlay-text {
+    display: flex;
+}
+
+.overlay-text p {
+    width: 50%;
 }
 
 .overlay-buttons {
