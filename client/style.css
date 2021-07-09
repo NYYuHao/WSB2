@@ -183,6 +183,7 @@ body {
 
 .overlay-text {
     display: flex;
+    flex-wrap: wrap;
 }
 
 .overlay-text p {

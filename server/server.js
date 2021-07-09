@@ -89,7 +89,11 @@ wss.on('connection', (ws, req) => {
     ws.on('close', (code) => {
         console.log(`Connection closed\tPID: ${ws.pid}`);
         connectionsSet.delete(ws.pid);
-        leaveGame(ws);
+        try {
+            leaveGame(ws);
+        }
+        catch (exception) {
+        }
     })
 
     // Print errors
@@ -158,7 +162,6 @@ function joinGame(ws, gameid) {
 
 // Leave the game for player ws, closing the game if necessary
 function leaveGame(ws) {
-    // TODO: Something happened here when two players refreshed simultaenously
     if (!pidTable[ws.pid])
         throw 'Invalid attempt to leave game';
 
