@@ -107,7 +107,7 @@ setInterval(() => {
     wss.clients.forEach((ws) => {
         ws.ping(() => {});
     });
-}, 30000);
+}, 5000);
 
 
 // Create a game for player ws and add it to the gamesTable
