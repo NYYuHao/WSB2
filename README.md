@@ -3,9 +3,11 @@ WebSocket Big Two
 
 Small project with the intention of being an online multiplayer web version of the popular card game Big Two.
 
-You can read details about the card game and how to play it on its [wikipedia page](https://en.wikipedia.org/wiki/Big_two).
+The game is currently live and playable at [this website](websocketbig2.herokuapp.com/)!
+
+You can read details about the card game and how to play it on its [wikipedia page](https://en.wikipedia.org/wiki/Big_two) or through our [wiki](https://github.com/NYYuHao/WSB2/wiki).
 
 Planned features:
-* On disconnect, remove players from any game they are in
-* Game logic (Shuffling, Hand comparison, etc.)
-* Frontend rendering (How to make cards pretty)
+* Display all players' remaining cards after game end
+* If a player has four 2s, they should automatically win
+* Potentially count remaining cards to assign scores to players
